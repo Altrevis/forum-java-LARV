@@ -22,7 +22,7 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected: " + clientSocket.getInetAddress());
 
-                SwingUtilities.invokeLater(() -> new LoginPage(new HashMap<>(), clientSocket));
+                SwingUtilities.invokeLater(() -> new LoginPage(clientSocket));
 
                 ClientHandler clientHandler = new ClientHandler(clientSocket);
                 clients.add(clientHandler);

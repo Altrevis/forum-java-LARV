@@ -1,50 +1,9 @@
 package com.forum;
 import java.sql.*;
-import java.util.HashMap;
 
 public class CreateDB {
     public static void main(String[] args) {
       
-    }
-
-    public static void saveTemplate(String userID, String title, String description) {
-        IDandPassword idAndPassword = new IDandPassword();
-    @SuppressWarnings("unchecked")
-    HashMap<String, String> loginInfo = idAndPassword.getLoginInfo();
-    userID = loginInfo.keySet().iterator().next();
-        
-        
-    
-        String url = "jdbc:mysql://localhost:3306/db_foum";
-        String user = "root";
-        String password = "password";
-	        String sqlCreateTable = "CREATE TABLE IF NOT EXISTS forum_templates (" +
-            "userID VARCHAR(50), " +
-            "titre VARCHAR(100), " +
-            "description TEXT" +
-            ")";
-
-      
-
-            String sqlInsertTemplate = "INSERT INTO forum_templates (userID, titre, description) VALUES (?, ?, ?)";
-
-            try (Connection connection = DriverManager.getConnection(url, user, password);
-                 PreparedStatement createStatement = connection.prepareStatement(sqlCreateTable);
-                 PreparedStatement insertStatement = connection.prepareStatement(sqlInsertTemplate)) {
-    
-                
-                createStatement.executeUpdate();
-    
-                
-                insertStatement.setString(1, userID);
-                insertStatement.setString(2, title);
-                insertStatement.setString(3, description);
-                insertStatement.executeUpdate();
-
-            System.out.println("Template enregistré dans la base de données avec succès !");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 

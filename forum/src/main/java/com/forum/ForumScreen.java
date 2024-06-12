@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 public class ForumScreen extends JFrame {
     private JTextArea chatArea;
@@ -92,10 +91,8 @@ public class ForumScreen extends JFrame {
         public void actionPerformed(ActionEvent e) {
             String message = messageField.getText();
             if (!message.isEmpty()) {
-                IDandPassword idAndPassword = new IDandPassword();
-                @SuppressWarnings("unchecked")
-                HashMap<String, String> loginInfo = idAndPassword.getLoginInfo();
-                userID = loginInfo.keySet().iterator().next();
+                
+              
                 chatArea.append(userID + ": " + message + "\n");
                 messageField.setText("");
             }
