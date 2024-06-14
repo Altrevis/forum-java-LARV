@@ -3,14 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connection</title>
+    <title>WoW Connection</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container">
+    <nav class="navbar">
+        <div class="navbar-container container">
+          <input type="checkbox" id="menu-toggle"/>
+          <div class="hamburger-lines">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+          </div>
+          <ul class="menu-items">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <h2 class="logo">WoW Connection</h2>
+        </div>
+    </nav>
+    <video autoplay muted loop>
+        <source src="img/best-of-world-of-warcraft-epic-cinematic-mix-2018-1_GkBsCSqB.mp4" type="video/mp4">
+    </video>
+    <div class="container2">
         <h1>Login</h1>
         <form id="login-form">
-            <label for="username">Login:</label>
+            <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <button type="submit">Enter</button>
         </form>
