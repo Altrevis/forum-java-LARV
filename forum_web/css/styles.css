@@ -21,7 +21,9 @@ body {
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     text-align: center;
-    width: 300px;
+    width: 350px;
+    margin: 0 auto;
+    margin-top: 50px;
 }
 
 h1 {
@@ -33,9 +35,11 @@ label {
     display: block;
     margin-bottom: 5px;
     font-size: 18px;
+    color: #fff;
+    text-align: left;
 }
 
-input {
+input, textarea {
     padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #444;
@@ -44,6 +48,11 @@ input {
     color: white;
     width: 100%;
     box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
 }
 
 button {
@@ -66,6 +75,12 @@ button:hover {
 
 button:active {
     background-color: #cc3700;
+}
+
+#form-status {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ffd700;
 }
 
 *,

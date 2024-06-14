@@ -35,3 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load threads and messages logic can be added here
 });
+
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    document.getElementById('form-status').innerText = "Message envoyé. Merci de nous avoir contactés!";
+    document.getElementById('contact-form').reset();
+});
