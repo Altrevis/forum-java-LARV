@@ -14,15 +14,16 @@ public class Server {
         int port = 12345;
         try {
             String serverAddress = "127.0.0.1";
-            ServerSocket serverSocket = new ServerSocket(port, 0, InetAddress.getByName(serverAddress));
-            System.out.println("Server started on port " + port);
+            try (ServerSocket serverSocket = new ServerSocket(port, 0, InetAddress.getByName(serverAddress))) {
+                System.out.println("Server started on port " + port);
 
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                System.out.println("New client connected: " + clientSocket.getInetAddress());
+                while (true) {
+                    Socket clientSocket = serverSocket.accept();
+                    System.out.println("New client connected: " + clientSocket.getInetAddress());
 
-                // Determine if the connection is for HTTP handling or client handling
-                new Thread(() -> handleConnection(clientSocket)).start();
+                    // Determine if the connection is for HTTP handling or client handling
+                    new Thread(() -> handleConnection(clientSocket)).start();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
