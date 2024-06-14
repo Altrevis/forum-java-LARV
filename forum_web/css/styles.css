@@ -47,6 +47,7 @@ input {
 }
 
 button {
+    margin-top: 2%;
     padding: 10px;
     background-color: #ff4500;
     border: none;
@@ -117,7 +118,7 @@ html {
 .menu-items li {
     list-style: none;
     margin-left: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1.6rem;
 }
 
 .navbar a {
@@ -128,8 +129,8 @@ html {
 }
 
 .navbar a:hover {
-    color: #0ac2f9;
-    border-bottom: 3px solid #f8b700;
+    color: #f8b700;
+    border-bottom: 3px solid #ff4500;
 }
 
 @media (max-width: 768px) {
