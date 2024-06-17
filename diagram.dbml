@@ -1,0 +1,36 @@
+Table messages {
+  id integer [primary key]
+  thread_id integer
+  username varchar
+  message text
+  created_at timestamp 
+}
+
+Table users {
+  id integer [primary key]
+  username varchar
+}
+
+Table posts {
+  id integer [primary key]
+  category_id integer
+  username varchar
+  titre varchar
+  description text [note: 'Content of the post']
+}
+
+Table categories {
+  id integer [primary key]
+  post_id text
+  liked_posts text
+}
+
+Ref: categories.id > posts.category_id
+
+Ref: posts.id > categories.post_id
+
+Ref: users.username > posts.username
+
+Ref: posts.username > messages.username
+
+Ref: posts.id > messages.thread_id

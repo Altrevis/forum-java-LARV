@@ -252,3 +252,7 @@ video {
     bottom: 0;
     margin: 0;
 }
+#threads {
+    text-align: left;
+    margin-top: 20px;
+}
