@@ -184,3 +184,44 @@ window.onload = function() {
         forum_join();
     }
 };
+
+setTimeout(function() {
+    fadeOutPortalVideo();
+}, 8000);
+
+function fadeOutPortalVideo() {
+    var portalVideo = document.getElementById('portalVideo');
+    portalVideo.style.opacity = 0;
+    setTimeout(function() {
+        showNavbarAndLoginForm();
+    }, 2000);
+}
+
+function showNavbarAndLoginForm() {
+    var loginContainer = document.getElementById('loginContainer');
+    var navbar = document.querySelector('.navbar');
+    loginContainer.classList.add('visible');
+    setTimeout(function() {
+        navbar.style.opacity = 1;
+    }, 1000);
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var login = document.getElementById('username').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/save-user-id', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    var params = 'userID=' + encodeURIComponent(login);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log('UserID saved successfully:', login);
+            window.location.href = 'forum.html';
+        }
+    };
+
+    xhr.send(params);
+});
