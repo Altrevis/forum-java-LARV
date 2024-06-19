@@ -12,7 +12,7 @@ function index() {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log('UserID saved successfully:', login);
-                localStorage.setItem('username', login); // Сохраняем username в localStorage
+                localStorage.setItem('username', login); 
                 window.location.href = 'forum.html';
             }
         };
@@ -146,7 +146,7 @@ function postMessage() {
                 if (xhr.status === 200) {
                     console.log('Message posted successfully:', message);
 
-                    // Создаем новый элемент для сообщения и добавляем его в контейнер сообщений
+                    
                     const messagesContainer = document.getElementById('messages-container');
                     const messageElement = document.createElement("div");
                     messageElement.className = "message";
@@ -155,7 +155,7 @@ function postMessage() {
                     `;
                     messagesContainer.appendChild(messageElement);
 
-                    // Очищаем поле ввода сообщения
+                    
                     document.getElementById('message').value = '';
                 } else {
                     console.error('Error posting message:', xhr.responseText);
