@@ -12,6 +12,7 @@ function index() {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log('UserID saved successfully:', login);
+                localStorage.setItem('username', login); // Сохраняем username в localStorage
                 window.location.href = 'forum.html';
             }
         };
@@ -21,30 +22,29 @@ function index() {
 }
 
 function forum_join() {
+    fetch("/get-threads")
+        .then(response => response.text())
+        .then(data => {
+            const threadsContainer = document.getElementById("threads-container");
+            const threads = data.trim().split("\n");
 
-        fetch("/get-threads")
-            .then(response => response.text())
-            .then(data => {
-                const threadsContainer = document.getElementById("threads");
-                const threads = data.trim().split("\n");
-
-                threads.forEach(thread => {
-                    const [id, titre, userID, description] = thread.split(", ");
-                    const threadElement = document.createElement("div");
-                    threadElement.className = "thread";
-                    threadElement.innerHTML = `
-                        <h2>${titre}</h2>
-                        <p>${description}</p>
-                        <p>Posted by: ${userID}</p>
-                    `;
-                    threadsContainer.appendChild(threadElement);
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching threads:", error);
+            threads.forEach(thread => {
+                const [id, titre, userID, description] = thread.split(", ");
+                const threadElement = document.createElement("div");
+                threadElement.className = "thread";
+                threadElement.innerHTML = `
+                    <h2><a href="post.html?id=${id}">${titre}</a></h2>
+                    <p>${description}</p>
+                    <p>Posted by: ${userID}</p>
+                `;
+                threadsContainer.appendChild(threadElement);
             });
-    
+        })
+        .catch(error => {
+            console.error("Error fetching threads:", error);
+        });
 }
+
 
 function contact() {
 document.getElementById('contact-form').addEventListener('submit', function(e) {
@@ -56,6 +56,118 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     document.getElementById('contact-form').reset();
 });
 }
+
+function forum_create() {
+    
+    document.getElementById('create-thread-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var title = document.getElementById('title').value;
+        var description = document.getElementById('description').value;
+        var pseudo = localStorage.getItem('username'); 
+
+        if (!pseudo) {
+            console.error('No username found. Please log in first.');
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/save-thread', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        var params = 'title=' + encodeURIComponent(title) + '&pseudo=' + encodeURIComponent(pseudo) + '&description=' + encodeURIComponent(description);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log('Thread saved successfully:', title);
+                    window.location.href = 'forum_join.html';
+                } else {
+                    console.error('Error saving thread:', xhr.responseText);
+                }
+            }
+        };
+
+        xhr.send(params);
+    });
+}
+
+function loadThread() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const threadId = urlParams.get('id');
+
+    fetch(`/get-thread?id=${encodeURIComponent(threadId)}`)
+        .then(response => response.text())
+        .then(data => {
+            const [threadInfo, ...messages] = data.trim().split("\n");
+            const [titre, userID, description] = threadInfo.split(",");
+            document.getElementById('thread-title').innerText = titre;
+            document.getElementById('thread-user').innerText = `Posted by: ${userID}`;
+            document.getElementById('thread-description').innerText = description;
+
+            const messagesContainer = document.getElementById('messages-container');
+            messages.forEach(msg => {
+                const [messageUserID, message, timestamp] = msg.split(",");
+                const messageElement = document.createElement("div");
+                messageElement.className = "message";
+                messageElement.innerHTML = `
+                    <p><strong>${messageUserID}</strong> (${timestamp}): ${message}</p>
+                `;
+                messagesContainer.appendChild(messageElement);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading thread:", error);
+        });
+}
+
+function postMessage() {
+    document.getElementById('post-message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const message = document.getElementById('message').value;
+        const pseudo = localStorage.getItem('username');
+        const urlParams = new URLSearchParams(window.location.search);
+        const threadId = urlParams.get('id');
+
+        if (!pseudo) {
+            console.error('No username found. Please log in first.');
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/save-message', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        const params = `threadID=${encodeURIComponent(threadId)}&userID=${encodeURIComponent(pseudo)}&message=${encodeURIComponent(message)}`;
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log('Message posted successfully:', message);
+
+                    // Создаем новый элемент для сообщения и добавляем его в контейнер сообщений
+                    const messagesContainer = document.getElementById('messages-container');
+                    const messageElement = document.createElement("div");
+                    messageElement.className = "message";
+                    messageElement.innerHTML = `
+                        <p><strong>${pseudo}</strong>: ${message}</p>
+                    `;
+                    messagesContainer.appendChild(messageElement);
+
+                    // Очищаем поле ввода сообщения
+                    document.getElementById('message').value = '';
+                } else {
+                    console.error('Error posting message:', xhr.responseText);
+                }
+            }
+        };
+
+        xhr.send(params);
+    });
+}
+
+
 window.onload = function() {
     const pathname = window.location.pathname;
 
@@ -63,6 +175,11 @@ window.onload = function() {
         index();
     } else if (pathname === "/forum_join.html") {
         forum_join();
+    } else if (pathname === "/forum_create.html") {
+        forum_create();
+    } else if (pathname === "/post.html") {
+        loadThread();
+        postMessage();
     } else if (pathname === "/contact.html") {
         forum_join();
     }

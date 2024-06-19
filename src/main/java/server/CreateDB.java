@@ -111,4 +111,64 @@ public class CreateDB {
 
         return response.toString();
     }
+    
+    public static String getThreadById(String threadId) {
+        StringBuilder response = new StringBuilder();
+        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String user = "root";
+        String password = "password";
+    
+        String threadSQL = "SELECT * FROM threads WHERE id = ?";
+        String messagesSQL = "SELECT * FROM messages WHERE threadID = ? ORDER BY timestamp ASC";
+    
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement threadStmt = connection.prepareStatement(threadSQL);
+             PreparedStatement messagesStmt = connection.prepareStatement(messagesSQL)) {
+    
+            threadStmt.setString(1, threadId);
+            ResultSet threadRS = threadStmt.executeQuery();
+            if (threadRS.next()) {
+                String titre = threadRS.getString("titre");
+                String userID = threadRS.getString("userID");
+                String description = threadRS.getString("description");
+                response.append(titre).append(",").append(userID).append(",").append(description).append("\n");
+            }
+    
+            messagesStmt.setString(1, threadId);
+            ResultSet messagesRS = messagesStmt.executeQuery();
+            while (messagesRS.next()) {
+                String messageUserID = messagesRS.getString("userID");
+                String message = messagesRS.getString("message");
+                String timestamp = messagesRS.getString("timestamp");
+                response.append(messageUserID).append(",").append(message).append(",").append(timestamp).append("\n");
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return response.toString();
+    }
+
+    public static void saveMessage(String threadID, String userID, String message) {
+        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        String insertSQL = "INSERT INTO messages (threadID, userID, message) VALUES (?, ?, ?)";
+    
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
+    
+            insertStatement.setString(1, threadID);
+            insertStatement.setString(2, userID);
+            insertStatement.setString(3, message);
+            insertStatement.executeUpdate();
+            System.out.println("Message saved successfully.");
+    
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Thread</title>
+    <title>Forum</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -23,12 +23,16 @@
         </div>
     </nav>
     <div class="container2">
-        <h1>Create a New Thread</h1>
-        <form id="create-thread-form">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" required></textarea>
+        <h1 id="thread-title"></h1>
+        <p id="thread-user"></p>
+        <p id="thread-description"></p>
+
+        <h2>Messages</h2>
+        <div id="messages-container"></div>
+
+        <h2>Post a New Message</h2>
+        <form id="post-message-form">
+            <textarea id="message" name="message" required></textarea>
             <button type="submit">Submit</button>
         </form>
     </div>
