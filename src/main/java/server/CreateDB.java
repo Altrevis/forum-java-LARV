@@ -10,7 +10,7 @@ import java.sql.Statement;
 public class CreateDB {
 
     public static void saveUserID(String userID) {
-        String url = "jdbc:mysql://localhost:3306/";
+        String url = "jdbc:mysql://10.34.6.84:3306/";
         String user = "root";
         String password = "password";
 
