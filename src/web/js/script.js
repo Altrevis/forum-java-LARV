@@ -204,4 +204,3 @@ function showNavbarAndLoginForm() {
         navbar.style.opacity = 1;
     }, 1000);
 }
-
