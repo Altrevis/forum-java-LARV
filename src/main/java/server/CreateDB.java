@@ -43,7 +43,7 @@ public class CreateDB {
     }
 
     public static void saveThread(String titre, String pseudo, String question) {
-        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
         String createTableSQL = "CREATE TABLE IF NOT EXISTS threads (" +
@@ -88,7 +88,7 @@ public class CreateDB {
    
     public static String getThreadsFromDB() {
         StringBuilder response = new StringBuilder();
-        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
         String sql = "SELECT * FROM threads";
@@ -114,7 +114,7 @@ public class CreateDB {
     
     public static String getThreadById(String threadId) {
         StringBuilder response = new StringBuilder();
-        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
     
@@ -151,7 +151,7 @@ public class CreateDB {
     }
 
     public static void saveMessage(String threadID, String userID, String message) {
-        String url = "jdbc:mysql://localhost:3306/db_forum";
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
         String insertSQL = "INSERT INTO messages (threadID, userID, message) VALUES (?, ?, ?)";
