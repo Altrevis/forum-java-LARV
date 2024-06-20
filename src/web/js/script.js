@@ -34,7 +34,6 @@ function forum_join() {
                 threadElement.className = "thread";
                 threadElement.innerHTML = `
                     <h2><a href="post.html?id=${id}">${titre}</a></h2>
-                    <p>${description}</p>
                     <p>Posted by: ${userID}</p>
                 `;
                 threadsContainer.appendChild(threadElement);
