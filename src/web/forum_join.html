@@ -7,15 +7,20 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <style>
-    .container5 {
-    z-index: 2;
+body {
+    overflow-y: auto;
+    height: 100%;
+}
+.container5 {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     text-align: center;
     width: 80%;
     margin: 0 auto;
-    margin-top: 50px;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    padding-top: 2%;
 }
 .thread {
     columns: 2;
@@ -27,9 +32,15 @@
     width: 80%;
     margin-top: 2%;
     color: #ff4500;
+    box-sizing: border-box;
 }
 .thread:hover {
     background-color: #ffd700;
+}
+@media (max-width: 500px) {
+    .container5 {
+        margin-top: 25%;
+    }
 }
 </style>
 <body>

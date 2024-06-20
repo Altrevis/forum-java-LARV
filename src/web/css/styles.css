@@ -250,6 +250,7 @@ img {
     right: 0;
     bottom: 0;
     margin: 0;
+    transition: 5s;
 }
 #threads {
     text-align: left;
