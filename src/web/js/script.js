@@ -193,7 +193,7 @@ function fadeOutPortalVideo() {
     portalVideo.style.opacity = 0;
     setTimeout(function() {
         showNavbarAndLoginForm();
-    }, 1000);
+    }, 100);
 }
 
 function showNavbarAndLoginForm() {
