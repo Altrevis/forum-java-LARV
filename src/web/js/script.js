@@ -33,11 +33,13 @@ function forum_join() {
                 const threadElement = document.createElement("div");
                 threadElement.className = "thread";
                 threadElement.innerHTML = `
-                    <h2><a href="post.html?id=${id}">${titre}</a></h2>
-                    <p>Posted by: ${userID}</p>
-                `;
+                <h2><a href="post.html?id=${id}">${titre}</a></h2>
+                <p>Posted by: ${userID}</p>
+                ${userID === localStorage.getItem('username') ? `<button class="delete-thread-btn" data-thread-id="${id}">Delete Thread</button>` : ''}
+            `;
                 threadsContainer.appendChild(threadElement);
             });
+            addDeleteThreadEventListeners();
         })
         .catch(error => {
             console.error("Error fetching threads:", error);
@@ -111,17 +113,19 @@ function loadThread() {
                 const messageElement = document.createElement("div");
                 messageElement.className = "message";
                 messageElement.innerHTML = `
-                    <p><strong>${messageUserID}</strong> (${timestamp}): ${message}</p>
-                    <div class="reaction-buttons">
-                        <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
-                        <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
-                    </div>
-                `;
+                <p><strong>${messageUserID}</strong> (${timestamp}): ${message}</p>
+                <div class="reaction-buttons">
+                    <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
+                    <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
+                    ${userID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">Delete</button>` : ''}
+                </div>
+            `;
                 messagesContainer.appendChild(messageElement);
             });
 
             // Attach event listeners to like and dislike buttons
             addLikeDislikeEventListeners();
+            addDeleteMessageEventListeners();
            
         })
         .catch(error => {
@@ -206,10 +210,6 @@ function postMessage() {
                     messageElement.className = "message";
                     messageElement.innerHTML = `
                         <p><strong>${pseudo}</strong>: ${message}</p>
-                        <div class="reaction-buttons">
-                            <button class="like-btn" data-message-id="${messageId}">👍 <span class="like-count">0</span></button>
-                            <button class="dislike-btn" data-message-id="${messageId}">👎 <span class="dislike-count">0</span></button>
-                        </div>
                     `;
                     messagesContainer.appendChild(messageElement);
 
@@ -225,6 +225,50 @@ function postMessage() {
         };
 
         xhr.send(params);
+    });
+}
+
+function addDeleteMessageEventListeners() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const messageId = button.getAttribute('data-message-id');
+            fetch(`/delete-message?id=${encodeURIComponent(messageId)}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                 
+                    loadThread();
+                } else {
+                    console.error('Failed to delete message:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting message:', error);
+            });
+        });
+    });
+}
+
+function addDeleteThreadEventListeners() {
+    document.querySelectorAll('.delete-thread-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const threadId = button.getAttribute('data-thread-id');
+            fetch(`/delete-thread?id=${encodeURIComponent(threadId)}`, {
+                method: 'POST',
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Успешно удалено, перенаправьте пользователя на страницу списка тредов
+                    window.location.href = 'forum_join.html';
+                } else {
+                    console.error('Failed to delete thread:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting thread:', error);
+            });
+        });
     });
 }
 

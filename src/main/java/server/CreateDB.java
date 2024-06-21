@@ -251,4 +251,47 @@ public class CreateDB {
         }
     }
 
+    public static void deleteMessage(String messageId) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        String deleteSQL = "DELETE FROM messages WHERE id = ?";
+    
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement statement = connection.prepareStatement(deleteSQL)) {
+    
+            statement.setString(1, messageId);
+            statement.executeUpdate();
+            System.out.println("Message deleted successfully.");
+    
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static void deleteThread(String threadId) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        String deleteMessagesSQL = "DELETE FROM messages WHERE threadID = ?";
+        String deleteThreadSQL = "DELETE FROM threads WHERE id = ?";
+    
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement deleteMessagesStmt = connection.prepareStatement(deleteMessagesSQL);
+             PreparedStatement deleteThreadStmt = connection.prepareStatement(deleteThreadSQL)) {
+    
+            deleteMessagesStmt.setString(1, threadId);
+            deleteMessagesStmt.executeUpdate();
+    
+            deleteThreadStmt.setString(1, threadId);
+            deleteThreadStmt.executeUpdate();
+    
+            System.out.println("Thread and associated messages deleted successfully.");
+    
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+
 }

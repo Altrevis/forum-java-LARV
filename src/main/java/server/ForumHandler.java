@@ -334,4 +334,71 @@ public class ForumHandler {
         }
     }
 
+    public static class DeleteMessageHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                exchange.sendResponseHeaders(405, 0);
+                return;
+            }
+    
+            String query = exchange.getRequestURI().getQuery();
+            String[] params = query.split("&");
+            String messageId = null;
+    
+            for (String param : params) {
+                String[] pair = param.split("=");
+                String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
+                String value = pair.length > 1 ? URLDecoder.decode(pair[1], StandardCharsets.UTF_8) : "";
+                if (key.equals("id")) {
+                    messageId = value;
+                    break;
+                }
+            }
+    
+            if (messageId != null) {
+                CreateDB.deleteMessage(messageId);
+                exchange.sendResponseHeaders(200, 0);
+            } else {
+                exchange.sendResponseHeaders(400, 0);
+            }
+    
+            exchange.getResponseBody().close();
+        }
+    }
+
+    public static class DeleteThreadHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                exchange.sendResponseHeaders(405, 0);
+                return;
+            }
+    
+            String query = exchange.getRequestURI().getQuery();
+            String[] params = query.split("&");
+            String threadId = null;
+    
+            for (String param : params) {
+                String[] pair = param.split("=");
+                String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
+                String value = pair.length > 1 ? URLDecoder.decode(pair[1], StandardCharsets.UTF_8) : "";
+                if (key.equals("id")) {
+                    threadId = value;
+                    break;
+                }
+            }
+    
+            if (threadId != null) {
+                CreateDB.deleteThread(threadId);
+                exchange.sendResponseHeaders(200, 0);
+            } else {
+                exchange.sendResponseHeaders(400, 0);
+            }
+    
+            exchange.getResponseBody().close();
+        }
+    }
+    
+
 }
