@@ -13,7 +13,7 @@ function index() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log('UserID saved successfully:', login);
                 localStorage.setItem('username', login); 
-                window.location.href = 'forum.html';
+                window.location.href = 'forum_join.html';
             }
         };
 
