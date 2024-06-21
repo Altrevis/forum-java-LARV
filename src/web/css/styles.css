@@ -1,7 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
+
 
 body {
-    font-family: 'Cinzel', serif;
+    font-family: 'Montserrat', serif;
     background-size: cover;
     background-position: center;
     display: flex;
