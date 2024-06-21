@@ -214,7 +214,7 @@ function postMessage() {
                     messagesContainer.appendChild(messageElement);
 
                     
-                    addLikeDislikeEventListeners();
+                    loadThread();
 
               
                     document.getElementById('message').value = '';
