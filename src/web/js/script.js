@@ -248,7 +248,7 @@ window.onload = function() {
 
 setTimeout(function() {
     fadeOutPortalVideo();
-}, 8000);
+}, 14000);
 
 function fadeOutPortalVideo() {
     var portalVideo = document.getElementById('portalVideo');
