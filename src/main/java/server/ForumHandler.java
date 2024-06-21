@@ -186,13 +186,13 @@ public class ForumHandler {
                 exchange.sendResponseHeaders(405, 0);
                 return;
             }
-
+    
             String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             String[] params = requestBody.split("&");
             String threadID = null;
             String userID = null;
             String message = null;
-
+    
             for (String param : params) {
                 String[] pair = param.split("=");
                 String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
@@ -205,11 +205,11 @@ public class ForumHandler {
                     message = value;
                 }
             }
-
+    
             if (threadID != null && userID != null && message != null) {
-                CreateDB.saveMessage(threadID, userID, message);
-
-                String response = "Message saved successfully";
+                int messageId = CreateDB.saveMessage(threadID, userID, message);
+    
+                String response = String.valueOf(messageId);
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -223,4 +223,115 @@ public class ForumHandler {
             }
         }
     }
+    
+
+    public static class LikeMessageHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                exchange.sendResponseHeaders(405, 0);
+                return;
+            }
+    
+            String query = exchange.getRequestURI().getQuery();
+            String messageId = getQueryParam(query, "id");
+    
+            if (messageId != null) {
+                int likes = CreateDB.likeMessage(messageId);
+                if (likes != -1) {
+                    String response = String.valueOf(likes);
+                    exchange.sendResponseHeaders(200, response.length());
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+                } else {
+                    exchange.sendResponseHeaders(500, 0);
+                }
+            } else {
+                exchange.sendResponseHeaders(400, 0);
+            }
+        }
+    }
+    
+    public static class DislikeMessageHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                exchange.sendResponseHeaders(405, 0);
+                return;
+            }
+    
+            String query = exchange.getRequestURI().getQuery();
+            String messageId = getQueryParam(query, "id");
+    
+            if (messageId != null) {
+                int dislikes = CreateDB.dislikeMessage(messageId);
+                if (dislikes != -1) {
+                    String response = String.valueOf(dislikes);
+                    exchange.sendResponseHeaders(200, response.length());
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+                } else {
+                    exchange.sendResponseHeaders(500, 0);
+                }
+            } else {
+                exchange.sendResponseHeaders(400, 0);
+            }
+        }
+    }
+    
+    private static String getQueryParam(String query, String param) {
+        String[] params = query.split("&");
+        for (String p : params) {
+            String[] pair = p.split("=");
+            if (pair.length > 1 && pair[0].equals(param)) {
+                return URLDecoder.decode(pair[1], StandardCharsets.UTF_8);
+            }
+        }
+        return null;
+    }
+ 
+    public static class UpdateLikeHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+                exchange.sendResponseHeaders(405, 0);
+                return;
+            }
+
+            String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            String[] params = requestBody.split("&");
+            String messageId = null;
+            boolean isLike = false;
+
+            for (String param : params) {
+                String[] pair = param.split("=");
+                String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
+                String value = pair.length > 1 ? URLDecoder.decode(pair[1], StandardCharsets.UTF_8) : "";
+                if (key.equals("messageId")) {
+                    messageId = value;
+                } else if (key.equals("isLike")) {
+                    isLike = Boolean.parseBoolean(value);
+                }
+            }
+
+            if (messageId != null) {
+                CreateDB.updateLikes(messageId, isLike);
+
+                String response = "Like/Dislike updated successfully";
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            } else {
+                String response = "Message ID is missing";
+                exchange.sendResponseHeaders(400, response.getBytes().length);
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        }
+    }
+
 }

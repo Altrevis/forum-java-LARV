@@ -105,26 +105,80 @@ function loadThread() {
             document.getElementById('thread-description').innerText = description;
 
             const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.innerHTML = ""; // Clear previous messages
             messages.forEach(msg => {
-                const [messageUserID, message, timestamp] = msg.split(",");
+                const [messageID, messageUserID, message, timestamp, likes, dislikes] = msg.split(",");
                 const messageElement = document.createElement("div");
                 messageElement.className = "message";
                 messageElement.innerHTML = `
                     <p><strong>${messageUserID}</strong> (${timestamp}): ${message}</p>
+                    <div class="reaction-buttons">
+                        <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
+                        <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
+                    </div>
                 `;
                 messagesContainer.appendChild(messageElement);
             });
+
+            // Attach event listeners to like and dislike buttons
+            addLikeDislikeEventListeners();
+           
         })
         .catch(error => {
             console.error("Error loading thread:", error);
         });
 }
 
+function addLikeDislikeEventListeners() {
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const messageId = button.getAttribute('data-message-id');
+            fetch('/update-like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `messageId=${encodeURIComponent(messageId)}&isLike=true`
+            })
+            .then(response => response.text())
+            .then(data => {
+                const likeCountElement = button.querySelector('.like-count');
+                likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+            })
+            .catch(error => {
+                console.error('Error updating like:', error);
+            });
+        });
+    });
+
+    document.querySelectorAll('.dislike-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const messageId = button.getAttribute('data-message-id');
+            fetch('/update-like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `messageId=${encodeURIComponent(messageId)}&isLike=false`
+            })
+            .then(response => response.text())
+            .then(data => {
+                const dislikeCountElement = button.querySelector('.dislike-count');
+                dislikeCountElement.innerText = parseInt(dislikeCountElement.innerText) + 1;
+            })
+            .catch(error => {
+                console.error('Error updating dislike:', error);
+            });
+        });
+    });
+}
+
+
 function postMessage() {
     document.getElementById('post-message-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const message = document.getElementById('message').value;
+        const message = document.getElementById('message').value.trim();
         const pseudo = localStorage.getItem('username');
         const urlParams = new URLSearchParams(window.location.search);
         const threadId = urlParams.get('id');
@@ -143,18 +197,26 @@ function postMessage() {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
+                    const messageId = xhr.responseText.trim();
                     console.log('Message posted successfully:', message);
 
-                    
+                  
                     const messagesContainer = document.getElementById('messages-container');
                     const messageElement = document.createElement("div");
                     messageElement.className = "message";
                     messageElement.innerHTML = `
                         <p><strong>${pseudo}</strong>: ${message}</p>
+                        <div class="reaction-buttons">
+                            <button class="like-btn" data-message-id="${messageId}">👍 <span class="like-count">0</span></button>
+                            <button class="dislike-btn" data-message-id="${messageId}">👎 <span class="dislike-count">0</span></button>
+                        </div>
                     `;
                     messagesContainer.appendChild(messageElement);
 
                     
+                    addLikeDislikeEventListeners();
+
+              
                     document.getElementById('message').value = '';
                 } else {
                     console.error('Error posting message:', xhr.responseText);
@@ -186,14 +248,14 @@ window.onload = function() {
 
 setTimeout(function() {
     fadeOutPortalVideo();
-}, 14000);
+}, 8000);
 
 function fadeOutPortalVideo() {
     var portalVideo = document.getElementById('portalVideo');
     portalVideo.style.opacity = 0;
     setTimeout(function() {
         showNavbarAndLoginForm();
-    }, 100);
+    }, 1000);
 }
 
 function showNavbarAndLoginForm() {

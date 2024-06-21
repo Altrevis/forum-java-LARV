@@ -18,6 +18,7 @@ public class Server {
         server.createContext("/get-thread", new ForumHandler.GetThreadHandler());
         server.createContext("/save-thread", new ForumHandler.SaveThreadHandler());
         server.createContext("/save-message", new ForumHandler.SaveMessageHandler());
+        server.createContext("/update-like", new ForumHandler.UpdateLikeHandler()); 
 
         
         server.setExecutor(Executors.newCachedThreadPool());

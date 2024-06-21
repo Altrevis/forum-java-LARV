@@ -52,31 +52,33 @@ public class CreateDB {
                 "titre VARCHAR(255)," +
                 "description TEXT)";
         String insertSQL = "INSERT INTO threads (userID, titre, description) VALUES (?, ?, ?)";
-
+    
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement();
              PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
-
+    
             statement.executeUpdate(createTableSQL);
-
+    
             insertStatement.setString(1, pseudo);
             insertStatement.setString(2, titre);
             insertStatement.setString(3, question);
             insertStatement.executeUpdate();
             System.out.println("Thread saved successfully.");
-
+    
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
+    
         String createMessagesTableSQL = "CREATE TABLE IF NOT EXISTS messages (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
                 "threadID INT," +
                 "userID VARCHAR(255)," +
                 "message TEXT," +
                 "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+                "likes INT DEFAULT 0," +
+                "dislikes INT DEFAULT 0," +
                 "FOREIGN KEY (threadID) REFERENCES threads(id))";
-
+    
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(createMessagesTableSQL);
@@ -84,6 +86,7 @@ public class CreateDB {
             ex.printStackTrace();
         }
     }
+    
 
    
     public static String getThreadsFromDB() {
@@ -137,10 +140,14 @@ public class CreateDB {
             messagesStmt.setString(1, threadId);
             ResultSet messagesRS = messagesStmt.executeQuery();
             while (messagesRS.next()) {
+                String messageID = messagesRS.getString("id");
                 String messageUserID = messagesRS.getString("userID");
                 String message = messagesRS.getString("message");
                 String timestamp = messagesRS.getString("timestamp");
-                response.append(messageUserID).append(",").append(message).append(",").append(timestamp).append("\n");
+                int likes = messagesRS.getInt("likes");
+                int dislikes = messagesRS.getInt("dislikes");
+                response.append(messageID).append(",").append(messageUserID).append(",").append(message)
+                        .append(",").append(timestamp).append(",").append(likes).append(",").append(dislikes).append("\n");
             }
     
         } catch (SQLException e) {
@@ -149,8 +156,9 @@ public class CreateDB {
     
         return response.toString();
     }
+    
 
-    public static void saveMessage(String threadID, String userID, String message) {
+    public static int saveMessage(String threadID, String userID, String message) {
         String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
@@ -168,7 +176,79 @@ public class CreateDB {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return 0;
     }
     
-    
+    public static int likeMessage(String messageId) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        
+        String updateSQL = "UPDATE messages SET likes = likes + 1 WHERE id = ?";
+        String selectSQL = "SELECT likes FROM messages WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement updateStmt = connection.prepareStatement(updateSQL);
+             PreparedStatement selectStmt = connection.prepareStatement(selectSQL)) {
+
+            updateStmt.setString(1, messageId);
+            updateStmt.executeUpdate();
+
+            selectStmt.setString(1, messageId);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("likes");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static int dislikeMessage(String messageId) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+
+        String updateSQL = "UPDATE messages SET dislikes = dislikes + 1 WHERE id = ?";
+        String selectSQL = "SELECT dislikes FROM messages WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement updateStmt = connection.prepareStatement(updateSQL);
+             PreparedStatement selectStmt = connection.prepareStatement(selectSQL)) {
+
+            updateStmt.setString(1, messageId);
+            updateStmt.executeUpdate();
+
+            selectStmt.setString(1, messageId);
+            ResultSet rs = selectStmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("dislikes");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static void updateLikes(String messageId, boolean isLike) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        String updateSQL = isLike ? 
+            "UPDATE messages SET likes = likes + 1 WHERE id = ?" : 
+            "UPDATE messages SET dislikes = dislikes + 1 WHERE id = ?";
+        
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             PreparedStatement updateStatement = connection.prepareStatement(updateSQL)) {
+            
+            updateStatement.setString(1, messageId);
+            updateStatement.executeUpdate();
+            System.out.println((isLike ? "Like" : "Dislike") + " updated successfully.");
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
