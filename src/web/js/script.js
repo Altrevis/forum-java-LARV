@@ -113,20 +113,20 @@ function loadThread() {
                 const messageElement = document.createElement("div");
                 messageElement.className = "message";
                 messageElement.innerHTML = `
-                <p><strong>${messageUserID}</strong> (${timestamp}): ${message}</p>
-                <div class="reaction-buttons">
-                    <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
-                    <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
-                    ${userID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">Delete</button>` : ''}
-                </div>
-            `;
+                    <div class="message-user">${messageUserID} (${timestamp})</div>
+                    <div class="message-text">${message}</div>
+                    <div class="reaction-buttons">
+                        <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
+                        <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
+                        ${userID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">Delete</button>` : ''}
+                    </div>
+                `;
                 messagesContainer.appendChild(messageElement);
             });
 
             // Attach event listeners to like and dislike buttons
             addLikeDislikeEventListeners();
             addDeleteMessageEventListeners();
-           
         })
         .catch(error => {
             console.error("Error loading thread:", error);

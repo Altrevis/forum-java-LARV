@@ -7,22 +7,82 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <style>
-.reaction-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+.container3 {
+    width: 80%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    color: #f8f8f2;
+    text-align: left;
 }
 
-.like-btn, .dislike-btn {
+#messages-container .message {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.message p {
+    margin: 0;
+    flex: 1;
+    font-size: 1.6rem; /* Font size for the message text */
+}
+
+.message .reaction-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.reaction-buttons button {
     background: none;
     border: none;
-    color: white;
+    color: #fff;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.like-btn:hover, .dislike-btn:hover {
+.reaction-buttons .delete-btn {
+    background-color: #ff4500;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reaction-buttons .delete-btn:hover {
+    background-color: #ff6347;
+}
+
+.reaction-buttons .delete-btn:active {
+    background-color: #cc3700;
+}
+
+.reaction-buttons button:hover {
     color: #ffd700;
+}
+
+.message-user {
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.message-text {
+    font-size: 1.6rem;
+    margin-top: 10px;
 }
 </style>
 <body>
