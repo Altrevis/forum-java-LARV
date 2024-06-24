@@ -46,29 +46,14 @@ public class CreateDB {
         String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS threads (" +
+
+        String createThreadsTableSQL = "CREATE TABLE IF NOT EXISTS threads (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
                 "userID VARCHAR(255)," +
                 "titre VARCHAR(255)," +
                 "description TEXT)";
-        String insertSQL = "INSERT INTO threads (userID, titre, description) VALUES (?, ?, ?)";
-    
-        try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement();
-             PreparedStatement insertStatement = connection.prepareStatement(insertSQL)) {
-    
-            statement.executeUpdate(createTableSQL);
-    
-            insertStatement.setString(1, pseudo);
-            insertStatement.setString(2, titre);
-            insertStatement.setString(3, question);
-            insertStatement.executeUpdate();
-            System.out.println("Thread saved successfully.");
-    
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    
+        String insertThreadSQL = "INSERT INTO threads (userID, titre, description) VALUES (?, ?, ?)";
+
         String createMessagesTableSQL = "CREATE TABLE IF NOT EXISTS messages (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
                 "threadID INT," +
@@ -78,10 +63,34 @@ public class CreateDB {
                 "likes INT DEFAULT 0," +
                 "dislikes INT DEFAULT 0," +
                 "FOREIGN KEY (threadID) REFERENCES threads(id))";
-    
+
+        String createUserReactionsTableSQL = "CREATE TABLE IF NOT EXISTS user_reactions (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY," +
+                "userID VARCHAR(255)," +
+                "messageID INT," +
+                "reaction ENUM('like', 'dislike')," +
+                "UNIQUE KEY (userID, messageID))";
+
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             Statement statement = connection.createStatement()) {
+             Statement statement = connection.createStatement();
+             PreparedStatement insertStatement = connection.prepareStatement(insertThreadSQL)) {
+
+            // Create the threads table
+            statement.executeUpdate(createThreadsTableSQL);
+
+            // Insert the new thread into the threads table
+            insertStatement.setString(1, pseudo);
+            insertStatement.setString(2, titre);
+            insertStatement.setString(3, question);
+            insertStatement.executeUpdate();
+            System.out.println("Thread saved successfully.");
+
+            // Create the messages table
             statement.executeUpdate(createMessagesTableSQL);
+
+            // Create the user_reactions table
+            statement.executeUpdate(createUserReactionsTableSQL);
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -248,6 +257,77 @@ public class CreateDB {
             
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static void handleReaction(String userID, String messageID, boolean isLike) {
+        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+        String user = "root";
+        String password = "password";
+        
+        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            connection.setAutoCommit(false);
+            
+            // Check if the user has already reacted
+            String selectSQL = "SELECT reaction FROM user_reactions WHERE userID = ? AND messageID = ?";
+            try (PreparedStatement selectStmt = connection.prepareStatement(selectSQL)) {
+                selectStmt.setString(1, userID);
+                selectStmt.setString(2, messageID);
+                ResultSet rs = selectStmt.executeQuery();
+                
+                if (rs.next()) {
+                    String existingReaction = rs.getString("reaction");
+                    
+                    // If the new reaction is the same as the existing one, do nothing
+                    if ((isLike && "like".equals(existingReaction)) || (!isLike && "dislike".equals(existingReaction))) {
+                        return;
+                    }
+
+                    // Update the reaction
+                    String updateReactionSQL = "UPDATE user_reactions SET reaction = ? WHERE userID = ? AND messageID = ?";
+                    try (PreparedStatement updateStmt = connection.prepareStatement(updateReactionSQL)) {
+                        updateStmt.setString(1, isLike ? "like" : "dislike");
+                        updateStmt.setString(2, userID);
+                        updateStmt.setString(3, messageID);
+                        updateStmt.executeUpdate();
+                    }
+
+                    // Update the message like/dislike count
+                    String updateMessageSQL = isLike ?
+                        "UPDATE messages SET likes = likes + 1, dislikes = dislikes - 1 WHERE id = ?" :
+                        "UPDATE messages SET likes = likes - 1, dislikes = dislikes + 1 WHERE id = ?";
+                    try (PreparedStatement updateMessageStmt = connection.prepareStatement(updateMessageSQL)) {
+                        updateMessageStmt.setString(1, messageID);
+                        updateMessageStmt.executeUpdate();
+                    }
+                } else {
+                    // Insert the new reaction
+                    String insertReactionSQL = "INSERT INTO user_reactions (userID, messageID, reaction) VALUES (?, ?, ?)";
+                    try (PreparedStatement insertStmt = connection.prepareStatement(insertReactionSQL)) {
+                        insertStmt.setString(1, userID);
+                        insertStmt.setString(2, messageID);
+                        insertStmt.setString(3, isLike ? "like" : "dislike");
+                        insertStmt.executeUpdate();
+                    }
+
+                    // Update the message like/dislike count
+                    String updateMessageSQL = isLike ?
+                        "UPDATE messages SET likes = likes + 1 WHERE id = ?" :
+                        "UPDATE messages SET dislikes = dislikes + 1 WHERE id = ?";
+                    try (PreparedStatement updateMessageStmt = connection.prepareStatement(updateMessageSQL)) {
+                        updateMessageStmt.setString(1, messageID);
+                        updateMessageStmt.executeUpdate();
+                    }
+                }
+
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

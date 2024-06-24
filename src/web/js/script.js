@@ -137,17 +137,19 @@ function addLikeDislikeEventListeners() {
     document.querySelectorAll('.like-btn').forEach(button => {
         button.addEventListener('click', () => {
             const messageId = button.getAttribute('data-message-id');
+            const userID = localStorage.getItem('username');
             fetch('/update-like', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `messageId=${encodeURIComponent(messageId)}&isLike=true`
+                body: `messageId=${encodeURIComponent(messageId)}&isLike=true&userID=${encodeURIComponent(userID)}`
             })
-            .then(response => response.text())
-            .then(data => {
-                const likeCountElement = button.querySelector('.like-count');
-                likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1;
+            .then(response => {
+                if (response.ok) {
+                    response.text()
+                    loadThread();
+                }
             })
             .catch(error => {
                 console.error('Error updating like:', error);
@@ -158,17 +160,19 @@ function addLikeDislikeEventListeners() {
     document.querySelectorAll('.dislike-btn').forEach(button => {
         button.addEventListener('click', () => {
             const messageId = button.getAttribute('data-message-id');
+            const userID = localStorage.getItem('username');
             fetch('/update-like', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `messageId=${encodeURIComponent(messageId)}&isLike=false`
+                body: `messageId=${encodeURIComponent(messageId)}&isLike=false&userID=${encodeURIComponent(userID)}`
             })
-            .then(response => response.text())
-            .then(data => {
-                const dislikeCountElement = button.querySelector('.dislike-count');
-                dislikeCountElement.innerText = parseInt(dislikeCountElement.innerText) + 1;
+            .then(response => {
+                if (response.ok) {
+                    response.text()
+                    loadThread();
+                }
             })
             .catch(error => {
                 console.error('Error updating dislike:', error);

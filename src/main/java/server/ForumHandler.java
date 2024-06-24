@@ -299,12 +299,13 @@ public class ForumHandler {
                 exchange.sendResponseHeaders(405, 0);
                 return;
             }
-
+    
             String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
             String[] params = requestBody.split("&");
             String messageId = null;
             boolean isLike = false;
-
+            String userID = null;
+    
             for (String param : params) {
                 String[] pair = param.split("=");
                 String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
@@ -313,19 +314,21 @@ public class ForumHandler {
                     messageId = value;
                 } else if (key.equals("isLike")) {
                     isLike = Boolean.parseBoolean(value);
+                } else if (key.equals("userID")) {
+                    userID = value;
                 }
             }
-
-            if (messageId != null) {
-                CreateDB.updateLikes(messageId, isLike);
-
+    
+            if (messageId != null && userID != null) {
+                CreateDB.handleReaction(userID, messageId, isLike);
+    
                 String response = "Like/Dislike updated successfully";
                 exchange.sendResponseHeaders(200, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
                 os.close();
             } else {
-                String response = "Message ID is missing";
+                String response = "Message ID or User ID is missing";
                 exchange.sendResponseHeaders(400, response.getBytes().length);
                 OutputStream os = exchange.getResponseBody();
                 os.write(response.getBytes());
@@ -333,6 +336,7 @@ public class ForumHandler {
             }
         }
     }
+    
 
     public static class DeleteMessageHandler implements HttpHandler {
         @Override
