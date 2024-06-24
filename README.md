@@ -1,28 +1,8 @@
 Projet java forum:
 
-Front-end: Alexis / Noah
+Front-end: Victor / Ryan
 
 Back-end: Léo / Alexandre
-
-------------------------------------
-
-objectif:
-
--faire une interface graphique avec seulement java: V
-
--faire un forum en full java: V
-
--système login/mot de passe: V
-
-------------------------------------
-
-Lien qui nous ont aidés:
-
-https://www.guru99.com/java-swing-gui.html (affichage de l'application)
-
-https://www.youtube.com/watch?v=Hiv3gwJC5kw (système login/password)
-
-------------------------------------
 
 Installation MySQL (Alexandre)
 
