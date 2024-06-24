@@ -259,7 +259,7 @@ function addDeleteThreadEventListeners() {
             })
             .then(response => {
                 if (response.ok) {
-                    // Успешно удалено, перенаправьте пользователя на страницу списка тредов
+                    
                     window.location.href = 'forum_join.html';
                 } else {
                     console.error('Failed to delete thread:', response.statusText);
