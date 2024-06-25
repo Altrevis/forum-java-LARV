@@ -113,7 +113,8 @@ function loadThread() {
                 const messageElement = document.createElement("div");
                 messageElement.className = "message";
                 messageElement.innerHTML = `
-                    <div class="message-user">${messageUserID} (${timestamp})</div>
+                    <div class="message-user">${messageUserID}</div>
+                    <div class="message-time">${timestamp}</div>
                     <div class="message-text">${message}</div>
                     <div class="reaction-buttons">
                         <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
