@@ -33,10 +33,10 @@ function forum_join() {
                 const threadElement = document.createElement("div");
                 threadElement.className = "thread";
                 threadElement.innerHTML = `
-                <h2><a href="post.html?id=${id}">${titre}</a></h2>
-                <p>Posted by: ${userID}</p>
-                ${userID === localStorage.getItem('username') ? `<button class="delete-thread-btn" data-thread-id="${id}">Delete Thread</button>` : ''}
-            `;
+                    <h2><a href="post.html?id=${id}">${titre}</a></h2>
+                    <p>Posted by: ${userID}</p>
+                    ${userID === localStorage.getItem('username') ? `<button class="delete-thread-btn" data-thread-id="${id}">Delete Thread</button>` : ''}
+                `;
                 threadsContainer.appendChild(threadElement);
             });
             addDeleteThreadEventListeners();
@@ -45,7 +45,6 @@ function forum_join() {
             console.error("Error fetching threads:", error);
         });
 }
-
 
 function contact() {
 document.getElementById('contact-form').addEventListener('submit', function(e) {
