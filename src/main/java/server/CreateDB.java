@@ -408,23 +408,24 @@ public class CreateDB {
      *
      * @param messageId The ID of the message to delete.
      */
-    public static void deleteMessage(String messageId) {
+    public static boolean deleteMessageById(String messageID) {
         String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
         String user = "root";
         String password = "password";
-        String deleteSQL = "DELETE FROM messages WHERE id = ?";
-
+        String sql = "DELETE FROM messages WHERE id = ?";
+    
         try (Connection connection = DriverManager.getConnection(url, user, password);
-             PreparedStatement statement = connection.prepareStatement(deleteSQL)) {
-
-            // Delete the message from the messages table
-            statement.setString(1, messageId);
-            statement.executeUpdate();
-            System.out.println("Message deleted successfully.");
-
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+    
+            statement.setString(1, messageID);
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0;
+    
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    
+        return false;
     }
 
     /**

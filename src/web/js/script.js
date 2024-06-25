@@ -118,7 +118,7 @@ function loadThread() {
                     <div class="reaction-buttons">
                         <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
                         <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
-                        ${userID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">Delete</button>` : ''}
+                          ${messageUserID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">🗑️</button>` : ''}
                     </div>
                 `;
                 messagesContainer.appendChild(messageElement);
@@ -236,15 +236,18 @@ function addDeleteMessageEventListeners() {
     document.querySelectorAll('.delete-btn').forEach(button => {
         button.addEventListener('click', () => {
             const messageId = button.getAttribute('data-message-id');
-            fetch(`/delete-message?id=${encodeURIComponent(messageId)}`, {
+            fetch(`/delete-message`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `messageID=${encodeURIComponent(messageId)}`
             })
             .then(response => {
                 if (response.ok) {
-                 
-                    loadThread();
+                    button.closest('.message').remove();
                 } else {
-                    console.error('Failed to delete message:', response.statusText);
+                    console.error('Error deleting message');
                 }
             })
             .catch(error => {

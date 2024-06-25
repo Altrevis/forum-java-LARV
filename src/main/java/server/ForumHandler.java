@@ -427,39 +427,43 @@ public class ForumHandler {
      * Handles deleting a message from a forum thread.
      */
     public static class DeleteMessageHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-                exchange.sendResponseHeaders(405, 0); // Method Not Allowed
-                return;
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+            exchange.sendResponseHeaders(405, 0);
+            return;
+        }
+
+        // Extract message ID from query parameters
+        String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        String[] params = requestBody.split("&");
+        String messageID = null;
+
+        for (String param : params) {
+            String[] pair = param.split("=");
+            String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
+            String value = pair.length > 1 ? URLDecoder.decode(pair[1], StandardCharsets.UTF_8) : "";
+            if (key.equals("messageID")) {
+                messageID = value;
             }
-    
-            // Extract message ID from query parameters
-            String query = exchange.getRequestURI().getQuery();
-            String[] params = query.split("&");
-            String messageId = null;
-    
-            for (String param : params) {
-                String[] pair = param.split("=");
-                String key = URLDecoder.decode(pair[0], StandardCharsets.UTF_8);
-                String value = pair.length > 1 ? URLDecoder.decode(pair[1], StandardCharsets.UTF_8) : "";
-                if (key.equals("id")) {
-                    messageId = value;
-                    break;
-                }
-            }
-    
-            // Delete the message from the database if message ID is provided; otherwise, return error
-            if (messageId != null) {
-                CreateDB.deleteMessage(messageId);
+        }
+
+         // Delete the message from the database if message ID is provided; otherwise, return error
+        if (messageID != null) {
+            boolean deleted = CreateDB.deleteMessageById(messageID);
+            if (deleted) {
                 exchange.sendResponseHeaders(200, 0);
             } else {
-                exchange.sendResponseHeaders(400, 0); // Bad Request
+                exchange.sendResponseHeaders(404, 0);
             }
-    
-            exchange.getResponseBody().close();
+        } else {
+            exchange.sendResponseHeaders(400, 0); // Bad Request
         }
+
+        exchange.getResponseBody().close();
     }
+}
+
 
     /**
      * Handles deleting a thread from the forum.
