@@ -280,3 +280,12 @@ img {
 .thread h2 a:hover {
     text-decoration: underline;
 }
+
+.rounded-border {
+    border: 2px solid white; /* Bordure de 2 pixels de couleur noire */
+    border-radius: 15px;     /* Coins arrondis de 15 pixels */
+    padding: 20px;           /* Espacement intérieur de 20 pixels */
+    margin: 20px;            /* Espacement extérieur de 20 pixels */
+    width: 200px;            /* Largeur de 200 pixels */
+    height: 100px;           /* Hauteur de 100 pixels */
+}
