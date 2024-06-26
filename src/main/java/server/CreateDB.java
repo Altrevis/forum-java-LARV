@@ -12,16 +12,17 @@ import java.sql.Statement;
  */
 public class CreateDB {
 
+    public static String url = "jdbc:mysql://10.34.6.84:3306/";
+    public static String user = "root";
+    public static String password = "password";
+        
     /**
      * Saves a user ID to the database if it doesn't already exist.
      *
      * @param userID The user ID to save.
      */
     public static void saveUserID(String userID) {
-        String url = "jdbc:mysql://10.34.6.84:3306/";
-        String user = "root";
-        String password = "password";
-
+        
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             Statement statement = connection.createStatement();
 
@@ -64,10 +65,7 @@ public class CreateDB {
      * @param question The question associated with the thread.
      */
     public static void saveThread(String titre, String pseudo, String question) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
-
+        
         // SQL statements to create necessary tables and insert thread information
         String createThreadsTableSQL = "CREATE TABLE IF NOT EXISTS threads (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -125,9 +123,6 @@ public class CreateDB {
      */
     public static String getThreadsFromDB() {
         StringBuilder response = new StringBuilder();
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
         String sql = "SELECT * FROM threads";
 
         try (Connection connection = DriverManager.getConnection(url, user, password);
@@ -158,10 +153,7 @@ public class CreateDB {
      */
     public static String getThreadById(String threadId) {
         StringBuilder response = new StringBuilder();
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
-
+        
         String threadSQL = "SELECT * FROM threads WHERE id = ?";
         String messagesSQL = "SELECT * FROM messages WHERE threadID = ? ORDER BY timestamp ASC";
 
@@ -209,9 +201,6 @@ public class CreateDB {
      * @return 0 if successful, or an error code otherwise (currently unhandled).
      */
     public static int saveMessage(String threadID, String userID, String message) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
         String insertSQL = "INSERT INTO messages (threadID, userID, message) VALUES (?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, user, password);
@@ -237,10 +226,7 @@ public class CreateDB {
      * @return The updated number of likes if successful, or -1 if an error occurs.
      */
     public static int likeMessage(String messageId) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
-
+        
         String updateSQL = "UPDATE messages SET likes = likes + 1 WHERE id = ?";
         String selectSQL = "SELECT likes FROM messages WHERE id = ?";
 
@@ -271,10 +257,7 @@ public class CreateDB {
      * @return The updated number of dislikes if successful, or -1 if an error occurs.
      */
     public static int dislikeMessage(String messageId) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
-
+        
         String updateSQL = "UPDATE messages SET dislikes = dislikes + 1 WHERE id = ?";
         String selectSQL = "SELECT dislikes FROM messages WHERE id = ?";
 
@@ -305,9 +288,6 @@ public class CreateDB {
      * @param isLike    Indicates whether it's a like (true) or dislike (false).
      */
     public static void updateLikes(String messageId, boolean isLike) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
         String updateSQL = isLike ?
                 "UPDATE messages SET likes = likes + 1 WHERE id = ?" :
                 "UPDATE messages SET dislikes = dislikes + 1 WHERE id = ?";
@@ -333,10 +313,7 @@ public class CreateDB {
      * @param isLike    Indicates whether it's a like (true) or dislike (false).
      */
     public static void handleReaction(String userID, String messageID, boolean isLike) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
-
+        
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             connection.setAutoCommit(false);
 
@@ -409,9 +386,6 @@ public class CreateDB {
      * @param messageId The ID of the message to delete.
      */
     public static boolean deleteMessageById(String messageID) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
         String sql = "DELETE FROM messages WHERE id = ?";
     
         try (Connection connection = DriverManager.getConnection(url, user, password);
@@ -434,9 +408,6 @@ public class CreateDB {
      * @param threadId The ID of the thread to delete.
      */
     public static void deleteThread(String threadId) {
-        String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
-        String user = "root";
-        String password = "password";
         String deleteMessagesSQL = "DELETE FROM messages WHERE threadID = ?";
         String deleteThreadSQL = "DELETE FROM threads WHERE id = ?";
 

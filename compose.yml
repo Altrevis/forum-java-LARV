@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      "MYSQL_DATABASE": 'db_forum'
+      "MYSQL_USER": 'a'
+      "MYSQL_PASSWORD": 'password'
+      "MYSQL_ROOT_PASSWORD": 'password'
+    ports:
+      - '3306:3306'

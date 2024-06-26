@@ -1,0 +1,3 @@
+FROM amazoncorretto
+
+COPY . /app
