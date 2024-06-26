@@ -1,8 +1,10 @@
-Projet java forum:
+Project Java Forum:
 
 Front-end: Victor / Ryan
 
 Back-end: Léo / Alexandre
+
+------------------------------------
 
 Installation MySQL (Alexandre)
 
@@ -27,7 +29,6 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH 'mysql_native_password' BY 'passwo
 FLUSH PRIVILEGES;
 exit
 
-
 ------------------------------------
 
 JBDC driver
@@ -36,3 +37,14 @@ https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j_8.3.0-1ubuntu2
 
 cd Downloads
 sudo apt install ./mysql-connector-j_8.3.0-1ubuntu22.04_all.deb
+
+------------------------------------
+
+Start Serveur.java
+(run java)
+
+find your IP address
+Hostname -I (10.34.6.***)
+
+go to your web browser
+http://10.34.6.***:8000/
