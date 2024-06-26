@@ -12,7 +12,7 @@ import java.sql.Statement;
  */
 public class CreateDB {
 
-    public static String url = "jdbc:mysql://10.34.6.84:3306/";
+    public static String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
     public static String user = "root";
     public static String password = "password";
         
@@ -22,6 +22,10 @@ public class CreateDB {
      * @param userID The user ID to save.
      */
     public static void saveUserID(String userID) {
+
+        String url = "jdbc:mysql://10.34.6.84:3306/";
+        String user = "root";
+        String password = "password";
         
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             Statement statement = connection.createStatement();
