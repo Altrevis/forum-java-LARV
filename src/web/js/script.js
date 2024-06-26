@@ -46,17 +46,6 @@ function forum_join() {
         });
 }
 
-function contact() {
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
-    document.getElementById('form-status').innerText = "Message envoyé. Merci de nous avoir contactés!";
-    document.getElementById('contact-form').reset();
-});
-}
-
 function forum_create() {
     
     document.getElementById('create-thread-form').addEventListener('submit', function(event) {
@@ -292,8 +281,6 @@ window.onload = function() {
     } else if (pathname === "/post.html") {
         loadThread();
         postMessage();
-    } else if (pathname === "/contact.html") {
-        forum_join();
     }
 };
 
