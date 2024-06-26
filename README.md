@@ -38,6 +38,10 @@ https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j_8.3.0-1ubuntu2
 cd Downloads
 sudo apt install ./mysql-connector-j_8.3.0-1ubuntu22.04_all.deb
 
+extension VScode install
+-Database Client JDBC
+-SQL Serveur CLient(mssql)
+
 ------------------------------------
 
 Start Serveur.java
