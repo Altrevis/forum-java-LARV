@@ -336,3 +336,115 @@ function showNavbarAndLoginForm() {
         navbar.style.opacity = 1;
     }, 100);
 }
+
+function private() {
+    fetch("/get-users")
+        .then(response => response.text())
+        .then(data => {
+            const userListElement = document.getElementById('user-list');
+            userListElement.innerHTML = "";
+
+            const users = data.trim().split("\n");
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = user;
+                li.addEventListener('click', () => {
+                    localStorage.setItem('selectedUser', user);
+                    window.location.href = 'private_conv.html';
+                });
+                userListElement.appendChild(li);
+            });
+        })
+        .catch(error => {
+            console.error("Error downloading users:", error);
+        });
+}
+
+function loadConversation() {
+    const selectedUser = localStorage.getItem('selectedUser');
+    const pseudo = localStorage.getItem('username');
+
+    if (!selectedUser || !pseudo) {
+        console.error('Selected user or username is missing.');
+        return;
+    }
+
+    fetch(`/get-messages?user1=${encodeURIComponent(pseudo)}&user2=${encodeURIComponent(selectedUser)}`)
+        .then(response => response.text())
+        .then(data => {
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.innerHTML = ""; // Clear previous messages
+
+            const messages = data.trim().split("\n");
+            messages.forEach(msg => {
+                const [messageUser, messageText, timestamp] = msg.split(",");
+                const messageElement = document.createElement("div");
+                messageElement.className = "message";
+                messageElement.innerHTML = `
+                    <p class="message-user">${messageUser}</p>
+                    <p>${messageText}</p>
+                    <p class="message-time">${timestamp}</p>
+                `;
+                messagesContainer.appendChild(messageElement);
+            });
+        })
+        .catch(error => {
+            console.error("Error loading messages:", error);
+        });
+}
+
+function sendMessage() {
+    document.getElementById('message-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const message = document.getElementById('message-input').value.trim();
+        const pseudo = localStorage.getItem('username');
+        const selectedUser = localStorage.getItem('selectedUser');
+
+        if (!pseudo || !selectedUser) {
+            console.error('No username or selected user found. Please log in first.');
+            return;
+        }
+
+        fetch('/send-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `from=${encodeURIComponent(pseudo)}&to=${encodeURIComponent(selectedUser)}&message=${encodeURIComponent(message)}`
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Message sent successfully:', message);
+                document.getElementById('message-input').value = '';
+                loadConversation();
+            } else {
+                console.error('Error sending message:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending message:', error);
+        });
+    });
+}
+
+window.onload = function() {
+    const pathname = window.location.pathname;
+
+    if (pathname === "/index.html" || pathname === "/") {
+        index();
+    } else if (pathname === "/forum_join.html") {
+        forum_join();
+    } else if (pathname === "/forum_create.html") {
+        forum_create();
+    } else if (pathname === "/post.html") {
+        loadThread();
+        postMessage();
+    } else if (pathname === "/private.html") {
+        private();
+    } else if (pathname === "/private_conv.html") {
+        loadConversation();
+        sendMessage();
+    }
+};

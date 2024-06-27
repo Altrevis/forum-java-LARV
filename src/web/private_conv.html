@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOW Private Chat</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
+    <style>
+        body {
+            font-family: 'Cinzel', serif;
+            background-color: #121212;
+            color: #ff4500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .messages {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1rem;
+            border: 1px solid #ff4500;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message p {
+            margin: 0;
+        }
+        .message .message-user {
+            font-weight: bold;
+        }
+        .message-form {
+            display: flex;
+            align-items: center;
+        }
+        .message-form input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ff4500;
+            border-radius: 10px;
+            margin-right: 10px;
+        }
+        .message-form button {
+            padding: 0.5rem 1rem;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" id="menu-toggle"/>
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="forum_join.html">Forum</a></li>
+                <li><a href="forum_create.html">Create Thread</a></li>
+                <li><a href="private.html">Private</a></li>
+            </ul>
+            <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
+        </div>
+    </nav>
+    <div class="chat-container">
+        <h1>Private Chat</h1>
+        <div class="messages" id="messages-container">
+            <!-- Messages will be added dynamically -->
+        </div>
+        <form class="message-form" id="message-form">
+            <input type="text" id="message-input" placeholder="Type your message" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
