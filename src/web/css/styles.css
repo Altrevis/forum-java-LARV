@@ -54,7 +54,7 @@ textarea {
     resize: vertical;
 }
 
-button {
+.button {
     margin-top: 2%;
     padding: 10px;
     background-color: #ff4500;
@@ -68,11 +68,11 @@ button {
     box-sizing: border-box;
 }
 
-button:hover {
+.button:hover {
     background-color: #ff6347;
 }
 
-button:active {
+.button:active {
     background-color: #cc3700;
 }
 
