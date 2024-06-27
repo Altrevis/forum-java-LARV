@@ -7,24 +7,61 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+  <style>
+        .user-list {
+            z-index: 2;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 10%;
+            margin-bottom: 5%;
+            padding: 2% 2%;
+            box-sizing: border-box;
+            color: #ff4500;
+        }
+
+        .user-list h2 {
+            margin-bottom: 20px;
+        }
+
+        .user-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-list li {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
 <body>
     <nav class="navbar">
         <div class="navbar-container container">
-          <input type="checkbox" id="menu-toggle"/>
-          <div class="hamburger-lines">
-            <span class="line line1"></span>
-            <span class="line line2"></span>
-            <span class="line line3"></span>
-          </div>
-          <ul class="menu-items">
-            <li><a href="forum_join.html">Forum</a></li>
-            <li><a href="forum_create.html">Create Thread</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-          <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
+            <input type="checkbox" id="menu-toggle"/>
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
+                <li><a href="forum_join.html">Forum</a></li>
+                <li><a href="forum_create.html">Create Thread</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
         </div>
     </nav>
 
+    <div class="user-list">
+        <h1>Users</h1>
+        <ul id="user-list">
+            <!-- User list items will be added dynamically -->
+        </ul>
+    </div>
     <img src="img/dalaran.jpg" alt="fond d'ecran qui est similaire au thème du jeu">
     <script src="js/script.js"></script>
 </body>

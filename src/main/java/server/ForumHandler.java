@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 
 public class ForumHandler {
 
@@ -502,4 +503,30 @@ public class ForumHandler {
             exchange.getResponseBody().close();
         }
     }
+    public static class GetUsersHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+            exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+            return;
+        }
+
+        // Retrieve all users from the database
+        List<String> users = CreateDB.getAllUsers();
+
+        // Prepare the response as plain text with each username on a new line
+        StringBuilder response = new StringBuilder();
+        for (String user : users) {
+            response.append(user).append("\n");
+        }
+
+        // Send the response
+        exchange.sendResponseHeaders(200, response.length());
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.toString().getBytes());
+        os.close();
+    }
+}
+
+    
 }

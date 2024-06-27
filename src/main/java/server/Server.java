@@ -22,6 +22,7 @@ public class Server {
         server.createContext("/update-like", new ForumHandler.UpdateLikeHandler());
         server.createContext("/delete-message", new ForumHandler.DeleteMessageHandler());
         server.createContext("/delete-thread", new ForumHandler.DeleteThreadHandler());
+        server.createContext("/get-users", new ForumHandler.GetUsersHandler());
 
         // Set a cached thread pool as the executor for the server
         server.setExecutor(Executors.newCachedThreadPool());

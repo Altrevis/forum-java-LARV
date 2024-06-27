@@ -268,6 +268,31 @@ function addDeleteThreadEventListeners() {
     });
 }
 
+function private() {
+    fetch("/get-users")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            const userListElement = document.getElementById('user-list');
+            userListElement.innerHTML = "";
+
+            const users = data.trim().split("\n");
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = user;
+                userListElement.appendChild(li);
+            });
+        })
+        .catch(error => {
+            console.error("Error downloading users:", error);
+        });
+}
+
 
 window.onload = function() {
     const pathname = window.location.pathname;
@@ -281,6 +306,8 @@ window.onload = function() {
     } else if (pathname === "/post.html") {
         loadThread();
         postMessage();
+    } else if (pathname === "/private.html") {
+        private();
     }
 };
 

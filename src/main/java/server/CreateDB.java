@@ -6,7 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Class to handle database operations related to forum functionality.
  */
@@ -433,5 +434,24 @@ public class CreateDB {
             ex.printStackTrace();
         }
     }
+   public static List<String> getAllUsers() {
+    List<String> users = new ArrayList<>();
+
+    try (Connection connection = DriverManager.getConnection(url, user, password);
+         Statement statement = connection.createStatement()) {
+
+        String sqlSelect = "SELECT nom FROM users"; // Проверьте и адаптируйте запрос под вашу схему
+        ResultSet resultSet = statement.executeQuery(sqlSelect);
+
+        while (resultSet.next()) {
+            String username = resultSet.getString("nom"); // Проверьте и адаптируйте имя столбца под вашу схему
+            users.add(username);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return users;
+}
 
 }
