@@ -101,14 +101,18 @@ function loadThread() {
                 const messageElement = document.createElement("div");
                 messageElement.className = "message";
                 messageElement.innerHTML = `
-                    <div class="message-user">${messageUserID}</div>
-                    <div class="message-time">${timestamp}</div>
-                    <div class="message-text">${message}</div>
-                    <div class="reaction-buttons">
-                        <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
-                        <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
-                          ${messageUserID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">🗑️</button>` : ''}
+                    <div class="message-header">
+                        <div class="message-info">
+                            <div class="message-user">${messageUserID}</div>
+                            <div class="message-time">${timestamp}</div>
+                        </div>
+                        <div class="reaction-buttons">
+                            <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
+                            <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
+                            ${messageUserID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">🗑️</button>` : ''}
+                        </div>
                     </div>
+                    <div class="message-text">${message}</div>
                 `;
                 messagesContainer.appendChild(messageElement);
             });
@@ -121,6 +125,7 @@ function loadThread() {
             console.error("Error loading thread:", error);
         });
 }
+
 
 function addLikeDislikeEventListeners() {
     document.querySelectorAll('.like-btn').forEach(button => {

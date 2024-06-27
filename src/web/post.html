@@ -29,25 +29,39 @@ body {
 
 #messages-container .message {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    flex-direction: column;
     background-color: rgba(255, 255, 255, 0.1);
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 20px;
 }
 
-.message p {
-    margin: 0;
-    flex: 1;
-    font-size: 1.6rem; /* Font size for the message text */
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.message .reaction-buttons {
+.message-info {
     display: flex;
-    align-items: flex-end;
-    gap: 5px;
-    margin-top: -2%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message-user {
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.message-time {
+    font-size: 1rem;
+}
+
+.reaction-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .reaction-buttons button {
@@ -83,27 +97,11 @@ body {
     color: #ffd700;
 }
 
-.message-user {
-    font-weight: bold;
-    font-size: 1.8rem;
-    margin-top: -1%;
-}
-
-.message-time {
-    font-weight: bold;
-    font-size: 1rem;
-    
-}
-
-.message-user .message-time {
-    display: flex;
-    flex-direction: column;
-}
-
-
 .message-text {
+    text-align: left;
     font-size: 1.6rem;
-    margin-top: 10%;
+    word-break: break-word;
+    margin-top: 10px;
 }
 
 </style>
@@ -130,7 +128,9 @@ body {
         <p id="thread-description"></p>
 
         <h2>Messages</h2>
+        <div>
         <div id="messages-container"></div>
+        </div>
 
         <h2>Post a New Message</h2>
         <form id="post-message-form">
