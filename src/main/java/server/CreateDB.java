@@ -30,25 +30,34 @@ public class CreateDB {
         
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             Statement statement = connection.createStatement();
-
+    
             // Create database if it doesn't exist
             String sqlCreateDatabase = "CREATE DATABASE IF NOT EXISTS db_forum";
             statement.executeUpdate(sqlCreateDatabase);
-
+    
             // Use the forum database
             String sqlUseDatabase = "USE db_forum";
             statement.executeUpdate(sqlUseDatabase);
-
+    
             // Create users table if it doesn't exist
-            String sqlCreateTable = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, nom VARCHAR(15))";
-            statement.executeUpdate(sqlCreateTable);
-
+            String sqlCreateUsersTable = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, nom VARCHAR(15))";
+            statement.executeUpdate(sqlCreateUsersTable);
+    
+            // Create chatmessages table if it doesn't exist
+            String sqlCreateChatMessagesTable = "CREATE TABLE IF NOT EXISTS chatmessages ("
+                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "fromUser VARCHAR(255) NOT NULL, "
+                    + "toUser VARCHAR(255) NOT NULL, "
+                    + "message TEXT NOT NULL, "
+                    + "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+            statement.executeUpdate(sqlCreateChatMessagesTable);
+    
             // Check if the user ID already exists
             String sqlSelect = "SELECT COUNT(*) AS count FROM users WHERE nom = '" + userID + "'";
             ResultSet resultSet = statement.executeQuery(sqlSelect);
             resultSet.next();
             int count = resultSet.getInt("count");
-
+    
             // Insert the user ID if it doesn't exist
             if (count == 0) {
                 String sqlInsert = "INSERT INTO users (nom) VALUES ('" + userID + "')";
@@ -61,6 +70,7 @@ public class CreateDB {
             e.printStackTrace();
         }
     }
+    
 
     /**
      * Saves a thread with its title, creator's pseudonym, and question to the database.
@@ -440,11 +450,11 @@ public class CreateDB {
     try (Connection connection = DriverManager.getConnection(url, user, password);
          Statement statement = connection.createStatement()) {
 
-        String sqlSelect = "SELECT nom FROM users"; // Проверьте и адаптируйте запрос под вашу схему
+        String sqlSelect = "SELECT nom FROM users"; 
         ResultSet resultSet = statement.executeQuery(sqlSelect);
 
         while (resultSet.next()) {
-            String username = resultSet.getString("nom"); // Проверьте и адаптируйте имя столбца под вашу схему
+            String username = resultSet.getString("nom");
             users.add(username);
         }
     } catch (SQLException e) {
@@ -454,27 +464,13 @@ public class CreateDB {
     return users;
 }
 public static void saveChatMessage(String fromUser, String toUser, String message) {
-    String createTableSQL = "CREATE TABLE IF NOT EXISTS chatmessages ("
-            + "id INT AUTO_INCREMENT PRIMARY KEY, "
-            + "fromUser VARCHAR(255) NOT NULL, "
-            + "toUser VARCHAR(255) NOT NULL, "
-            + "message TEXT NOT NULL, "
-            + "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
-            + ")";
-    
     try (Connection connection = DriverManager.getConnection(url, user, password);
-         Statement createTableStatement = connection.createStatement();
-         PreparedStatement insertStatement = connection.prepareStatement(
+         PreparedStatement statement = connection.prepareStatement(
                  "INSERT INTO chatmessages (fromUser, toUser, message) VALUES (?, ?, ?)")) {
-        
-        // Create table if it doesn't exist
-        createTableStatement.executeUpdate(createTableSQL);
-
-        // Insert the chat message
-        insertStatement.setString(1, fromUser);
-        insertStatement.setString(2, toUser);
-        insertStatement.setString(3, message);
-        insertStatement.executeUpdate();
+        statement.setString(1, fromUser);
+        statement.setString(2, toUser);
+        statement.setString(3, message);
+        statement.executeUpdate();
     } catch (SQLException e) {
         e.printStackTrace();
     }

@@ -535,7 +535,7 @@ public static class GetMessagesHandler implements HttpHandler {
             return;
         }
 
-        // Получаем параметры user1 и user2 из запроса
+       
         String query = exchange.getRequestURI().getQuery();
         String[] params = query.split("&");
         String user1 = null;
@@ -576,7 +576,7 @@ public static class SaveChatMessageHandler implements HttpHandler {
             return;
         }
 
-        // Извлекаем параметры из тела запроса
+     
         String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         String[] params = requestBody.split("&");
         String fromUser = null;
