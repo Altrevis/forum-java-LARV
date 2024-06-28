@@ -527,6 +527,86 @@ public class ForumHandler {
         os.close();
     }
 }
+public static class GetMessagesHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+            exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+            return;
+        }
 
+        // Получаем параметры user1 и user2 из запроса
+        String query = exchange.getRequestURI().getQuery();
+        String[] params = query.split("&");
+        String user1 = null;
+        String user2 = null;
+        for (String param : params) {
+            if (param.startsWith("user1=")) {
+                user1 = URLDecoder.decode(param.substring("user1=".length()), "UTF-8");
+            } else if (param.startsWith("user2=")) {
+                user2 = URLDecoder.decode(param.substring("user2=".length()), "UTF-8");
+            }
+        }
+
+        if (user1 != null && user2 != null) {
+            List<String> messages = CreateDB.getChatMessages(user1, user2);
+            StringBuilder response = new StringBuilder();
+            for (String msg : messages) {
+                response.append(msg).append("\n");
+            }
+            exchange.sendResponseHeaders(200, response.length());
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.toString().getBytes());
+            os.close();
+        } else {
+            String response = "Missing parameters";
+            exchange.sendResponseHeaders(400, response.getBytes().length); // Bad Request
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+}
+
+public static class SaveChatMessageHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+            exchange.sendResponseHeaders(405, 0); // Method Not Allowed
+            return;
+        }
+
+        // Извлекаем параметры из тела запроса
+        String requestBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        String[] params = requestBody.split("&");
+        String fromUser = null;
+        String toUser = null;
+        String message = null;
+        for (String param : params) {
+            if (param.startsWith("fromUser=")) {
+                fromUser = URLDecoder.decode(param.substring("fromUser=".length()), "UTF-8");
+            } else if (param.startsWith("toUser=")) {
+                toUser = URLDecoder.decode(param.substring("toUser=".length()), "UTF-8");
+            } else if (param.startsWith("message=")) {
+                message = URLDecoder.decode(param.substring("message=".length()), "UTF-8");
+            }
+        }
+
+        if (fromUser != null && toUser != null && message != null) {
+            CreateDB.saveChatMessage(fromUser, toUser, message);
+            String response = "Message saved successfully";
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        } else {
+            String response = "Missing parameters";
+            exchange.sendResponseHeaders(400, response.getBytes().length); // Bad Request
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
+}
     
 }

@@ -26,7 +26,7 @@
             padding: 1rem;
             box-sizing: border-box;
         }
-        .messages {
+        .chat-messages {
             height: 300px;
             overflow-y: auto;
             padding: 1rem;
@@ -44,18 +44,18 @@
         .message .message-user {
             font-weight: bold;
         }
-        .message-form {
+        .chat-form {
             display: flex;
             align-items: center;
         }
-        .message-form input {
+        .chat-form input {
             flex: 1;
             padding: 0.5rem;
             border: 1px solid #ff4500;
             border-radius: 10px;
             margin-right: 10px;
         }
-        .message-form button {
+        .chat-form button {
             padding: 0.5rem 1rem;
             background-color: #ff4500;
             border: none;
@@ -86,14 +86,18 @@
         </div>
     </nav>
     <div class="chat-container">
-        <h1>Private Chat</h1>
-        <div class="messages" id="messages-container">
-            <!-- Messages will be added dynamically -->
+        <div class="chat-header">
+            <h2>Chat with <span id="chat-with-user"></span></h2>
         </div>
-        <form class="message-form" id="message-form">
-            <input type="text" id="message-input" placeholder="Type your message" required>
-            <button type="submit">Send</button>
-        </form>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Chat messages will be loaded here -->
+        </div>
+        <div class="chat-form">
+            <form id="chat-form">
+                <input type="text" id="chat-message" placeholder="Type a message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
     </div>
     <img src="img/races.jpg" alt="">
     <script src="js/script.js"></script>

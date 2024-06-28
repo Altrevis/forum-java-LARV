@@ -453,5 +453,53 @@ public class CreateDB {
 
     return users;
 }
+public static void saveChatMessage(String fromUser, String toUser, String message) {
+    String createTableSQL = "CREATE TABLE IF NOT EXISTS chatmessages ("
+            + "id INT AUTO_INCREMENT PRIMARY KEY, "
+            + "fromUser VARCHAR(255) NOT NULL, "
+            + "toUser VARCHAR(255) NOT NULL, "
+            + "message TEXT NOT NULL, "
+            + "timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+            + ")";
+    
+    try (Connection connection = DriverManager.getConnection(url, user, password);
+         Statement createTableStatement = connection.createStatement();
+         PreparedStatement insertStatement = connection.prepareStatement(
+                 "INSERT INTO chatmessages (fromUser, toUser, message) VALUES (?, ?, ?)")) {
+        
+        // Create table if it doesn't exist
+        createTableStatement.executeUpdate(createTableSQL);
 
+        // Insert the chat message
+        insertStatement.setString(1, fromUser);
+        insertStatement.setString(2, toUser);
+        insertStatement.setString(3, message);
+        insertStatement.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
+public static List<String> getChatMessages(String user1, String user2) {
+    List<String> messages = new ArrayList<>();
+    try (Connection connection = DriverManager.getConnection(url, user, password);
+         PreparedStatement statement = connection.prepareStatement(
+                 "SELECT fromUser, message FROM chatmessages WHERE (fromUser = ? AND toUser = ?) OR (fromUser = ? AND toUser = ?) ORDER BY timestamp ASC")) {
+        statement.setString(1, user1);
+        statement.setString(2, user2);
+        statement.setString(3, user2);
+        statement.setString(4, user1);
+        try (ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                String fromUser = rs.getString("fromUser");
+                String message = rs.getString("message");
+                messages.add(fromUser + ": " + message);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return messages;
+}
 }
