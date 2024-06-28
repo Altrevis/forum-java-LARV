@@ -1,5 +1,7 @@
+/* Import Google Fonts Montserrat with weight 700 */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
+/* General body styling */
 body {
     font-family: 'Montserrat', serif;
     background-size: cover;
@@ -13,6 +15,7 @@ body {
     overflow: hidden;
 }
 
+/* Styling for the central container */
 .container2 {
     z-index: 2;
     background-color: rgba(0, 0, 0, 0.8);
@@ -25,19 +28,21 @@ body {
     margin-top: 50px;
 }
 
+/* Styling for headings */
 h1 {
     margin-bottom: 20px;
     color: #ffd700;
 }
 
+/* Styling for labels */
 label {
     display: block;
     margin-bottom: 5px;
     font-size: 18px;
     color: #fff;
-    text-align: left;
 }
 
+/* Styling for input and textarea elements */
 input, textarea {
     padding: 10px;
     margin-bottom: 20px;
@@ -49,11 +54,13 @@ input, textarea {
     box-sizing: border-box;
 }
 
+/* Additional styling for textarea */
 textarea {
     height: 100px;
     resize: vertical;
 }
 
+/* Styling for buttons */
 .button {
     margin-top: 2%;
     padding: 10px;
@@ -68,41 +75,49 @@ textarea {
     box-sizing: border-box;
 }
 
+/* Button hover effect */
 .button:hover {
     background-color: #ff6347;
 }
 
+/* Button active state */
 .button:active {
     background-color: #cc3700;
 }
 
+/* Styling for form status messages */
 #form-status {
     margin-top: 20px;
     font-size: 16px;
     color: #ffd700;
 }
 
+/* Box-sizing reset for all elements */
 *,
 *::after,
 *::before {
     box-sizing: border-box;
 }
 
+/* HTML font size set to 62.5% for easier rem calculations */
 html {
     font-size: 62.5%;
 }
 
+/* Responsive styling for navbar toggle */
 .navbar input[type="checkbox"],
 .navbar .hamburger-lines {
     display: none;
 }
 
+/* Styling for navbar container */
 .container {
     max-width: 1200px;
     width: 90%;
     margin: auto;
 }
 
+/* Styling for navbar */
 .navbar {
     z-index: 3;
     position: fixed;
@@ -112,6 +127,7 @@ html {
     color: #fff;
 }
 
+/* Styling for navbar container layout */
 .navbar-container {
     display: flex;
     justify-content: space-between;
@@ -119,22 +135,26 @@ html {
     height: 64px;
 }
 
+/* Styling for menu items in navbar */
 .menu-items {
     order: 2;
     display: flex;
 }
 
+/* Styling for logo in navbar */
 .logo {
     order: 1;
     font-size: 300%;
 }
 
+/* Styling for individual menu items */
 .menu-items li {
     list-style: none;
     margin-left: 1.5rem;
     font-size: 1.2rem;
 }
 
+/* Styling for links in navbar */
 .navbar a {
     color: #fff;
     text-decoration: none;
@@ -143,23 +163,28 @@ html {
     font-size: 150%;
 }
 
+/* Hover effect for links in navbar */
 .navbar a:hover {
     color: #f8b700;
     border-bottom: 3px solid #ff4500;
 }
 
+/* Media query for responsive design */
 @media (max-width: 768px) {
+    /* Display navbar toggle elements */
     .navbar input[type="checkbox"],
     .navbar .hamburger-lines {
         display: block;
     }
 
+    /* Adjust navbar container for mobile */
     .navbar-container {
         display: block;
         position: relative;
         height: 64px;
     }
 
+    /* Styling for navbar toggle checkbox */
     .navbar input[type="checkbox"] {
         position: absolute;
         display: block;
@@ -172,6 +197,7 @@ html {
         cursor: pointer;
     }
 
+    /* Styling for hamburger lines */
     .navbar .hamburger-lines {
         height: 28px;
         width: 35px;
@@ -184,6 +210,7 @@ html {
         justify-content: space-between;
     }
 
+    /* Styling for lines in hamburger menu */
     .navbar .hamburger-lines .line {
         height: 4px;
         width: 100%;
@@ -191,6 +218,7 @@ html {
         background: #fff;
     }
 
+    /* Styling for menu items in navbar for mobile */
     .navbar .menu-items {
         padding-top: 100px;
         background: #24252a;
@@ -204,12 +232,14 @@ html {
         transition: transform 0.5s ease-in-out;
     }
 
+    /* Styling for individual menu items in navbar for mobile */
     .navbar .menu-items li {
         margin-bottom: 1.8rem;
         font-size: 1rem;
         font-weight: 500;
     }
 
+    /* Styling for logo in navbar for mobile */
     .logo {
         position: absolute;
         top: 12px;
@@ -217,29 +247,36 @@ html {
         font-size: 1.7rem;
     }
 
+    /* Show menu items on navbar toggle checkbox checked state */
     .navbar input[type="checkbox"]:checked ~ .menu-items {
         transform: translateX(0);
     }
 
+    /* Rotate hamburger lines for toggle animation */
     .navbar input[type="checkbox"]:checked ~ .hamburger-lines .line1 {
         transform: rotate(45deg);
     }
 
+    /* Hide middle hamburger line on toggle */
     .navbar input[type="checkbox"]:checked ~ .hamburger-lines .line2 {
         transform: scaleY(0);
     }
 
+    /* Rotate hamburger lines for toggle animation */
     .navbar input[type="checkbox"]:checked ~ .hamburger-lines .line3 {
         transform: rotate(-45deg);
     }
 }
 
+/* Media query for smaller screens */
 @media (max-width: 500px) {
+    /* Hide logo on navbar toggle checkbox checked state */
     .navbar input[type="checkbox"]:checked ~ .logo {
         display: none;
     }
 }
 
+/* Styling for video element */
 video {
     z-index: 1;
     width: 100%;
@@ -253,6 +290,8 @@ video {
     margin: 0;
     transition: 5s;
 }
+
+/* Styling for image element */
 img {
     z-index: 0;
     width: 100%;
@@ -266,24 +305,30 @@ img {
     margin: 0;
     transition: 5s;
 }
+
+/* Additional styling for threads section */
 #threads {
     text-align: left;
     margin-top: 20px;
 }
+
+/* Styling for thread titles in threads section */
 .thread h2 a {
     color: #f8b700;
     text-decoration: none;
 }
 
+/* Hover effect for thread titles */
 .thread h2 a:hover {
     text-decoration: underline;
 }
 
+/* Additional styling for rounded borders */
 .rounded-border {
-    border: 2px solid white; /* Bordure de 2 pixels de couleur noire */
-    border-radius: 15px;     /* Coins arrondis de 15 pixels */
-    padding: 20px;           /* Espacement intérieur de 20 pixels */
-    margin: 20px;            /* Espacement extérieur de 20 pixels */
-    width: 200px;            /* Largeur de 200 pixels */
-    height: 100px;           /* Hauteur de 100 pixels */
+    border: 2px solid white;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    width: 200px;
+    height: 100px;
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        /* Additional CSS for portal animation */
+        /* Removes default margins and disables scrolling */
         body, html {
             margin: 0;
             padding: 0;
@@ -15,6 +15,7 @@
             overflow: hidden;
         }
 
+        /* Container for the video, fills the space and hides overflow */
         .video-container {
             position: relative;
             width: 100%;
@@ -22,6 +23,7 @@
             overflow: hidden;
         }
 
+        /* Ensures the video covers the full container space */
         .video-wrapper {
             position: absolute;
             top: 0;
@@ -31,6 +33,7 @@
             overflow: hidden;
         }
 
+        /* Styles the video to cover the entire wrapper and adds a transition effect */
         .video-wrapper video {
             width: 100%;
             height: 100%;
@@ -38,6 +41,7 @@
             transition: opacity 2s ease-in-out;
         }
 
+        /* Styles for the centered login container */
         .container2 {
             z-index: 2;
             position: absolute;
@@ -52,42 +56,53 @@
             width: 350px;
         }
 
+        /* Makes the login container visible with full opacity */
         .container2.visible {
             opacity: 1;
         }
     </style>
 </head>
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar">
         <div class="navbar-container container">
+          <!-- Checkbox for hamburger menu toggle -->
           <input type="checkbox" id="menu-toggle"/>
+          <!-- Hamburger menu icon for mobile view -->
           <div class="hamburger-lines">
             <span class="line line1"></span>
             <span class="line line2"></span>
             <span class="line line3"></span>
           </div>
+          <!-- Navigation menu items -->
           <ul class="menu-items">
             <li><a href="index.html">Register</a></li>
           </ul>
+          <!-- Logo linking to the home page -->
           <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
         </div>
     </nav>
+    <!-- Container for the video background -->
     <div class="video-container">
         <div class="video-wrapper">
+            <!-- Video element with autoplay and muted properties -->
             <video id="portalVideo" autoplay muted>
                 <source src="img/portal.mp4" type="video/mp4">
             </video>
         </div>
     </div>
+    <!-- Centered login form container -->
     <div class="container2" id="loginContainer">
         <h1>Login</h1>
         <form id="loginForm">
+            <!-- Username input field -->
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+            <!-- Submit button -->
             <button class="button" type="submit">Submit</button>
         </form>
     </div>
-    <img src="img/dragon-isles.jpg" alt="fond d'ecran qui est similaire au thème du jeu">
+    <img src="img/dragon-isles.jpg" alt="">
     <script src="js/script.js"></script>
 </body>
 </html>

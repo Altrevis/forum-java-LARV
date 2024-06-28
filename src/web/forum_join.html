@@ -6,11 +6,13 @@
     <title>Forum Join</title>
     <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Allows vertical scrolling and sets body height */
         body {
             overflow-y: auto;
             height: 100%;
         }
 
+        /* Styles for the main container for joining forums */
         .container5 {
             z-index: 2;
             background-color: rgba(0, 0, 0, 0.8);
@@ -25,6 +27,7 @@
             box-sizing: border-box;
         }
 
+        /* Styles for individual threads in the list */
         .thread {
             background-color: rgba(75, 74, 74, 0.856);
             border: 2px solid #ff4500;
@@ -39,18 +42,22 @@
             padding: 1%;
         }
 
+        /* Header styling within a thread */
         .thread h2 {
             margin: 0 0 10px 0;
         }
 
+        /* Paragraph styling within a thread */
         .thread p {
             margin: 0;
         }
 
+        /* Changes background color when hovering over a thread */
         .thread:hover {
             background-color: #616160;
         }
 
+        /* Styles for the delete button inside a thread */
         .delete-thread-btn {
             width: 90%;
             margin-top: 10px;
@@ -62,12 +69,14 @@
             border-radius: 5px;
         }
 
+        /* Responsive design for screens up to 768px wide */
         @media (max-width: 768px) {
             .thread {
                 width: calc(50% - 2%);
             }
         }
 
+        /* Responsive design for screens up to 500px wide */
         @media (max-width: 500px) {
             .container5 {
                 margin-top: 25%;
@@ -81,26 +90,32 @@
     </style>
 </head>
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar">
         <div class="navbar-container container">
+            <!-- Checkbox for hamburger menu toggle -->
             <input type="checkbox" id="menu-toggle"/>
+            <!-- Hamburger menu icon for mobile view -->
             <div class="hamburger-lines">
                 <span class="line line1"></span>
                 <span class="line line2"></span>
                 <span class="line line3"></span>
             </div>
+            <!-- Navigation menu items -->
             <ul class="menu-items">
                 <li><a href="forum_join.html">Forum</a></li>
                 <li><a href="forum_create.html">Create Thread</a></li>
                 <li><a href="private.html">Private</a></li>
             </ul>
+            <!-- Logo linking to the home page -->
             <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
         </div>
     </nav>
+    <!-- Main container for the list of threads to join -->
     <div class="container5" id="threads-container">
       <h1>Join a Forum</h1>
     </div>
-    <img src="img/TanaanJungle.webp" alt="fond d'ecran qui est similaire au thème du jeu">
+    <img src="img/TanaanJungle.webp" alt="">
     <script src="js/script.js"></script>
 </body>
 </html>

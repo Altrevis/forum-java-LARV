@@ -7,29 +7,39 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar">
         <div class="navbar-container container">
+            <!-- Checkbox for hamburger menu toggle -->
             <input type="checkbox" id="menu-toggle"/>
+            <!-- Hamburger menu icon for mobile view -->
             <div class="hamburger-lines">
                 <span class="line line1"></span>
                 <span class="line line2"></span>
                 <span class="line line3"></span>
             </div>
+            <!-- Navigation menu items -->
             <ul class="menu-items">
                 <li><a href="forum_join.html">Forum</a></li>
                 <li><a href="forum_create.html">Create Thread</a></li>
                 <li><a href="private.html">Private</a></li>
             </ul>
+            <!-- Logo linking to the home page -->
             <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
         </div>
     </nav>
+    <!-- Main container for creating a new thread -->
     <div class="container2">
         <h1>Create a New Thread</h1>
+        <!-- Form for creating a new thread -->
         <form id="create-thread-form">
+            <!-- Input field for the thread title -->
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>
+            <!-- Text area for the thread description -->
             <label for="description">Description:</label>
             <textarea id="description" name="description" required></textarea>
+            <!-- Submit button for the form -->
             <button class="button" type="submit">Submit</button>
         </form>
     </div>
