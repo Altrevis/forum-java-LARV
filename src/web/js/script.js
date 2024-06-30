@@ -95,48 +95,36 @@ function loadThread() {
             document.getElementById('thread-description').innerText = description;
 
             const messagesContainer = document.getElementById('messages-container');
-
-            // Get existing messages
-            const existingMessages = Array.from(messagesContainer.getElementsByClassName('message'));
-
-            // Track message IDs that are already displayed
-            const existingMessageIDs = existingMessages.map(message => message.dataset.messageId);
-
+            messagesContainer.innerHTML = ""; // Clear previous messages
             messages.forEach(msg => {
                 const [messageID, messageUserID, message, timestamp, likes, dislikes] = msg.split(",");
-
-                // Check if the message already exists
-                if (!existingMessageIDs.includes(messageID)) {
-                    const messageElement = document.createElement("div");
-                    messageElement.className = "message";
-                    messageElement.dataset.messageId = messageID;
-                    messageElement.innerHTML = `
-                        <div class="message-header">
-                            <div class="message-info">
-                                <div class="message-user">${messageUserID}</div>
-                                <div class="message-time">${timestamp}</div>
-                            </div>
-                            <div class="reaction-buttons">
-                                <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
-                                <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
-                                ${messageUserID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">🗑️</button>` : ''}
-                            </div>
+                const messageElement = document.createElement("div");
+                messageElement.className = "message";
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-info">
+                             <div class="message-user" title="Click to chat with ${messageUserID}">${messageUserID}</div>
+                            <div class="message-time">${timestamp}</div>
                         </div>
-                        <div class="message-text">${message}</div>
-                    `;
-
-                    messagesContainer.appendChild(messageElement);
-                }
+                        <div class="reaction-buttons">
+                            <button class="like-btn" data-message-id="${messageID}">👍 <span class="like-count">${likes || 0}</span></button>
+                            <button class="dislike-btn" data-message-id="${messageID}">👎 <span class="dislike-count">${dislikes || 0}</span></button>
+                            ${messageUserID === localStorage.getItem('username') ? `<button class="delete-btn" data-message-id="${messageID}">🗑️</button>` : ''}
+                        </div>
+                    </div>
+                    <div class="message-text">${message}</div>
+                `;
+                messagesContainer.appendChild(messageElement);
             });
 
-            // Attach event listeners to new like and dislike buttons
+            // Attach event listeners to like and dislike buttons
             addLikeDislikeEventListeners();
             addDeleteMessageEventListeners();
-
-            // Attach event listeners to new message-user elements
-            document.querySelectorAll('.message-user').forEach(userElement => {
-                userElement.addEventListener('click', () => openChat(userElement.textContent));
-            });
+        
+        // Attach event listeners to new message-user elements
+        document.querySelectorAll('.message-user').forEach(userElement => {
+            userElement.addEventListener('click', () => openChat(userElement.textContent));
+        });
         })
         .catch(error => {
             console.error("Error loading thread:", error);
@@ -374,7 +362,8 @@ window.onload = function() {
     } else if (pathname === "/forum_create.html") {
         forum_create();
     } else if (pathname === "/post.html") {
-        setInterval(loadThread, 500);
+        loadThread();
+        setInterval(loadThread, 950);
         postMessage();
     } else if (pathname === "/private.html") {
         private();
