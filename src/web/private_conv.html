@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
     <link rel="stylesheet" href="css/styles.css">
     <style>
+        /* Body styling with centered content and full viewport height */
         body {
             color: #ff4500;
             display: flex;
@@ -15,6 +16,7 @@
             height: 100vh;
             margin: 0;
         }
+        /* Chat container styling with fixed width, rounded corners, shadow, and dark background */
         .chat-container {
             z-index: 2;
             width: 80%;
@@ -26,6 +28,7 @@
             padding: 1rem;
             box-sizing: border-box;
         }
+        /* Chat messages area with scrollable overflow, padding, border, and semi-transparent background */
         .chat-messages {
             height: 300px;
             overflow-y: auto;
@@ -35,19 +38,24 @@
             margin-bottom: 1rem;
             background-color: rgba(255, 255, 255, 0.1);
         }
+        /* Individual message styling with spacing */
         .message {
             margin-bottom: 10px;
         }
+        /* Message paragraph styling with no margin */
         .message p {
             margin: 0;
         }
+        /* Styling for message user names to be bold */
         .message .message-user {
             font-weight: bold;
         }
+        /* Chat form styling with horizontal layout and aligned items */
         .chat-form {
             display: flex;
             align-items: center;
         }
+        /* Input styling within the chat form */
         .chat-form input {
             flex: 1;
             padding: 0.5rem;
@@ -55,6 +63,7 @@
             border-radius: 10px;
             margin-right: 10px;
         }
+        /* Button styling in the chat form */
         .chat-form button {
             padding: 0.5rem 1rem;
             background-color: #ff4500;
@@ -63,34 +72,42 @@
             color: white;
             cursor: pointer;
         }
+        /* Header styling with custom color and centered text */
         h1 {
+            color: #ffd700;
             text-align: center;
         }
     </style>
 </head>
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar">
         <div class="navbar-container container">
+            <!-- Checkbox for hamburger menu toggle -->
             <input type="checkbox" id="menu-toggle"/>
+            <!-- Hamburger menu icon for mobile view -->
             <div class="hamburger-lines">
                 <span class="line line1"></span>
                 <span class="line line2"></span>
                 <span class="line line3"></span>
             </div>
+            <!-- Navigation menu items -->
             <ul class="menu-items">
                 <li><a href="forum_join.html">Forum</a></li>
                 <li><a href="forum_create.html">Create Thread</a></li>
                 <li><a href="private.html">Private</a></li>
             </ul>
+            <!-- Logo linking to the home page -->
             <h2 class="logo"><a href="index.html">WOW Forum</a></h2>
         </div>
     </nav>
+    <!-- Chat container with header, messages area, and form for input -->
     <div class="chat-container">
         <div class="chat-header">
-            <h2>Chat with <span id="chat-with-user"></span></h2>
+            <h1>Chat with <span id="chat-with-user"></span></h1>
         </div>
         <div class="chat-messages" id="chat-messages">
-            <!-- Chat messages will be loaded here -->
+            <!-- Placeholder for chat messages -->
         </div>
         <div class="chat-form">
             <form id="chat-form">
