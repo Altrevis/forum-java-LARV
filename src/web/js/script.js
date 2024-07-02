@@ -132,6 +132,11 @@ function loadThread() {
         .catch(error => {
             console.error("Error loading thread:", error); // Log any errors
         });
+        // Function to open chat with a user
+    function openChat(user) {
+        localStorage.setItem('chatWith', user); // Save the user to chat with
+        window.location.href = 'private_conv.html'; // Redirect to the private conversation page
+    }
 }
 
 // Function to handle like and dislike button events
