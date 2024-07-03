@@ -369,7 +369,7 @@ window.onload = function() {
         forum_create();
     } else if (pathname === "/post.html") {
         loadThread();
-        setInterval(loadThread, 950); // Refresh thread every 950ms
+        setInterval(loadThread, 1000); // Refresh thread every 1000ms
         postMessage();
     } else if (pathname === "/private.html") {
         private();
