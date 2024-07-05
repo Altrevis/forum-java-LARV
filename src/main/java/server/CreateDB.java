@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class CreateDB {
 
-    public static String url = "jdbc:mysql://10.34.6.84:3306/db_forum";
+    public static String url = "jdbc:mysql://localhost:3306/db_forum";
     public static String user = "root";
     public static String password = "password";
         
